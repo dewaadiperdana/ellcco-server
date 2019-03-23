@@ -1,0 +1,12 @@
+{
+  "name": "elconics-server",
+  "version": "1.0.0",
+  "description": "eLconics API server for eLconics mobile app",
+  "main": "app.js",
+  "repository": "https://github.com/dewaadiperdana/elconics-server.git",
+  "author": "Adi Perdana <dewaadiperdana@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
