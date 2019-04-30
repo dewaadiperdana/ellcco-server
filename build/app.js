@@ -1,6 +1,6 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime/helpers/esm/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
