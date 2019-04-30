@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
   "development": {
     "username": "postgres",
@@ -20,4 +22,5 @@ module.exports = {
     "host": process.env.DB_HOST,
     "dialect": "postgres"
   }
-}
+};
+//# sourceMappingURL=config.js.map

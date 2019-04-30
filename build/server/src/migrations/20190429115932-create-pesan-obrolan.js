@@ -1,0 +1,52 @@
+'use strict';
+
+module.exports = {
+  up: function up(queryInterface, Sequelize) {
+    return queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";').then(function () {
+      return queryInterface.createTable('pesan_obrolan', {
+        id: {
+          allowNull: false,
+          primaryKey: true,
+          type: Sequelize.UUID,
+          defaultValue: Sequelize.literal('uuid_generate_v4()')
+        },
+        id_ruang_obrolan: {
+          type: Sequelize.UUID,
+          references: {
+            model: 'ruang_obrolan',
+            key: 'id',
+            as: 'id_ruang_obrolan'
+          }
+        },
+        id_pengguna: {
+          type: Sequelize.UUID,
+          references: {
+            model: 'pengguna',
+            key: 'id',
+            as: 'id_pengguna'
+          }
+        },
+        isi_pesan: {
+          type: Sequelize.TEXT
+        },
+        tanggal: {
+          type: Sequelize.DATE
+        },
+        created_at: {
+          allowNull: false,
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.literal('NOW()')
+        },
+        updated_at: {
+          allowNull: false,
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.literal('NOW()')
+        }
+      });
+    });
+  },
+  down: function down(queryInterface, Sequelize) {
+    return queryInterface.dropTable('pesan_obrolan');
+  }
+};
+//# sourceMappingURL=20190429115932-create-pesan-obrolan.js.map
