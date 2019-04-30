@@ -7,7 +7,7 @@
   "author": "Adi Perdana <dewaadiperdana@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "yarn build && node ./build/app.js",
+    "start": "node ./build/app.js",
     "dev": "nodemon --exec babel-node ./api/app.js",
     "build": "rm -rf ./build && babel -d ./build ./api -s"
   },
