@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.use('/api/layanan', LayananRoutes);
 
 app.get('/', (req, res) => {
-    res.send('eLconics is comming to help you.');
+  res.send('eLconics is comming to help you.');
 });
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
