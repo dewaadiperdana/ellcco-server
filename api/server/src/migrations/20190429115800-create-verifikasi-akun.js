@@ -19,7 +19,8 @@ module.exports = {
             }
           },
           token: {
-            type: Sequelize.TEXT
+            type: Sequelize.TEXT,
+            unique: true
           },
           tanggal_berlaku: {
             type: Sequelize.DATE

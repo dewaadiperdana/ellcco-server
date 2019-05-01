@@ -5,9 +5,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
     },
     id_pengguna: DataTypes.UUID,
-    token: DataTypes.TEXT,
+    token: {
+      type: DataTypes.TEXT,
+      unique: true
+    },
     tanggal_berlaku: DataTypes.DATE
   }, {
     freezeTableName: true,

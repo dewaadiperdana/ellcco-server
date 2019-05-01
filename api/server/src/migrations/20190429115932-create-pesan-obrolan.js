@@ -30,7 +30,8 @@ module.exports = {
             type: Sequelize.TEXT
           },
           tanggal: {
-            type: Sequelize.DATE
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.literal('NOW()')
           },
           created_at: {
             allowNull: false,

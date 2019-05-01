@@ -31,7 +31,12 @@ module.exports = {
             type: Sequelize.STRING
           },
           tgl_registrasi: {
-            type: Sequelize.DATE
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.literal('NOW()')
+          },
+          aktif: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
           },
           created_at: {
             allowNull: false,

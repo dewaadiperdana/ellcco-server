@@ -46,7 +46,8 @@ module.exports = {
             type: Sequelize.STRING
           },
           tanggal: {
-            type: Sequelize.DATE
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.literal('NOW()')
           },
           biaya: {
             type: Sequelize.INTEGER

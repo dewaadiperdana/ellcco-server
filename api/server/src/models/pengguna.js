@@ -5,13 +5,18 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
     },
     id_hak_akses: DataTypes.UUID,
     kode_pengguna: DataTypes.STRING,
     nama: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    tgl_registrasi: DataTypes.DATE
+    tgl_registrasi: DataTypes.DATE,
+    aktif: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     freezeTableName: true,
     tableName: 'pengguna',
