@@ -9,7 +9,7 @@
   "scripts": {
     "start": "NODE_ENV=production node ./build/app.js",
     "dev": "NODE_ENV=development nodemon --exec babel-node ./api/app.js",
-    "build": "rm -rf ./build && babel -d ./build ./api -s",
+    "build": "rm -rf ./build && babel -d ./build ./api -s --copy-files",
     "secretkey": "node ./scripts/generate-secret-key"
   },
   "dependencies": {
