@@ -16,7 +16,8 @@ module.exports = {
               model: 'pengguna',
               key: 'id',
               as: 'id_pengguna'
-            }
+            },
+            onDelete: 'cascade'
           },
           judul: {
             type: Sequelize.STRING
@@ -28,7 +29,8 @@ module.exports = {
             type: Sequelize.DATE
           },
           dibaca: {
-            type: Sequelize.BOOLEAN
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
           },
           created_at: {
             allowNull: false,

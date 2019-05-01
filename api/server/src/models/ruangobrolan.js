@@ -8,8 +8,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     id_tukang: DataTypes.UUID,
     id_pelanggan: DataTypes.UUID,
-    kode_ruang: DataTypes.STRING,
-    status: DataTypes.BOOLEAN
+    kode_ruang: {
+      type: DataTypes.STRING,
+      unique: true
+    },
+    dibuka: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    }
   }, {
     freezeTableName: true,
     tableName: 'ruang_obrolan',

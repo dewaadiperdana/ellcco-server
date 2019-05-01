@@ -16,7 +16,8 @@ module.exports = {
               model: 'pesanan',
               key: 'id',
               as: 'id_pesanan'
-            }
+            },
+            onDelete: 'cascade'
           },
           nama: {
             type: Sequelize.STRING

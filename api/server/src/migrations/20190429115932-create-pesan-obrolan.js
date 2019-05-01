@@ -16,7 +16,8 @@ module.exports = {
               model: 'ruang_obrolan',
               key: 'id',
               as: 'id_ruang_obrolan'
-            }
+            },
+            onDelete: 'cascade'
           },
           id_pengguna: {
             type: Sequelize.UUID,
@@ -24,7 +25,8 @@ module.exports = {
               model: 'pengguna',
               key: 'id',
               as: 'id_pengguna'
-            }
+            },
+            onDelete: 'cascade'
           },
           isi_pesan: {
             type: Sequelize.TEXT

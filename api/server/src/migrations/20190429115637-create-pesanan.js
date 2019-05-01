@@ -16,7 +16,8 @@ module.exports = {
               model: 'pengguna',
               key: 'id',
               as: 'id_tukang'
-            }
+            },
+            onDelete: 'cascade'
           },
           id_pelanggan: {
             type: Sequelize.UUID,
@@ -24,7 +25,8 @@ module.exports = {
               model: 'pengguna',
               key: 'id',
               as: 'id_pelanggan'
-            }
+            },
+            onDelete: 'cascade'
           },
           id_layanan: {
             type: Sequelize.UUID,
@@ -32,18 +34,21 @@ module.exports = {
               model: 'layanan',
               key: 'id',
               as: 'id_layanan'
-            }
+            },
+            onDelete: 'cascade'
           },
           id_status: {
             type: Sequelize.UUID,
             references: {
               model: 'status_pesanan',
               key: 'id',
-              as: 'id_status'
-            }
+              as: 'id_status',
+            },
+            onDelete: 'cascade'
           },
           kode_pesanan: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            unique: true
           },
           tanggal: {
             type: Sequelize.DATE,

@@ -16,7 +16,8 @@ module.exports = {
               model: 'pengguna',
               key: 'id',
               as: 'id_pengguna'
-            }
+            },
+            onDelete: 'cascade'
           },
           token: {
             type: Sequelize.TEXT,

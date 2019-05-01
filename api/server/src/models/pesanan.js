@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
     id_pelanggan: DataTypes.UUID,
     id_layanan: DataTypes.UUID,
     id_status: DataTypes.UUID,
-    kode_pesanan: DataTypes.STRING,
+    kode_pesanan: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     tanggal: DataTypes.DATE,
     biaya: DataTypes.INTEGER
   }, {

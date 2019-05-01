@@ -16,7 +16,8 @@ module.exports = {
               model: 'pengguna',
               key: 'id',
               as: 'id_tukang'
-            }
+            },
+            onDelete: 'cascade'
           },
           id_pelanggan: {
             type: Sequelize.UUID,
@@ -24,13 +25,16 @@ module.exports = {
               model: 'pengguna',
               key: 'id',
               as: 'id_pelanggan'
-            }
+            },
+            onDelete: 'cascade'
           },
           kode_ruang: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            unique: true
           },
-          status: {
-            type: Sequelize.BOOLEAN
+          dibuka: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: true
           },
           created_at: {
             allowNull: false,

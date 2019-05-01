@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
     judul: DataTypes.STRING,
     deskripsi: DataTypes.TEXT,
     tanggal: DataTypes.DATE,
-    dibaca: DataTypes.BOOLEAN
+    dibaca: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     freezeTableName: true,
     tableName: 'notifikasi',

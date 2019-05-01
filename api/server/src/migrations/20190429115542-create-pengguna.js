@@ -16,16 +16,19 @@ module.exports = {
               model: 'hak_akses',
               key: 'id',
               as: 'id_hak_akses'
-            }
+            },
+            onDelete: 'cascade'
           },
           kode_pengguna: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            unique: true
           },
           nama: {
             type: Sequelize.STRING
           },
           email: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            unique: true
           },
           password: {
             type: Sequelize.STRING

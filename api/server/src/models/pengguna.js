@@ -8,9 +8,15 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4
     },
     id_hak_akses: DataTypes.UUID,
-    kode_pengguna: DataTypes.STRING,
+    kode_pengguna: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     nama: DataTypes.STRING,
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     password: DataTypes.STRING,
     tgl_registrasi: DataTypes.DATE,
     aktif: {
@@ -28,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     });
 
-    Pengguna.hasMany(models.VerifikasiAkun, {
+    Pengguna.hasOne(models.VerifikasiAkun, {
       foreignKey: 'id_pengguna',
       onDelete: 'CASCADE'
     });
