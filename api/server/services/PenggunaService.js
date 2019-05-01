@@ -127,7 +127,7 @@ class PenggunaService {
         };
 
         let send = await mail.send(
-          'admin@elconics.com',
+          'hello@elconics.herokuapp.com',
           pengguna.email,
           'Verifikasi Akun',
           'verifikasi_akun',

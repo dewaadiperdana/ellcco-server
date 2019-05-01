@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
-import sgTransport from 'nodemailer-sendgrid-transport';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -19,12 +18,14 @@ export default class Mail {
     };
 
     this.sendGrid = {
+      service: 'gmail',
       auth: {
-        api_key: process.env.SENDGRID_API_KEY
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
       }
     };
 
-    this.transport = nodemailer.createTransport(sgTransport(this.sendGrid));
+    this.transport = nodemailer.createTransport(this.sendGrid);
     this.transport.use('compile', hbs(this.options));
   }
 
@@ -39,9 +40,11 @@ export default class Mail {
       }, (error, response) => {
         if (error) {
           reject(error);
+          console.log(error);
         }
 
         resolve(response);
+        console.log(response);
         this.transport.close();
       });
     });
