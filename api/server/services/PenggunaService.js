@@ -127,7 +127,7 @@ class PenggunaService {
         };
 
         let send = await mail.send(
-          'hello@elconics.herokuapp.com',
+          'Admin eLconics <hello@elconics.herokuapp.com>',
           pengguna.email,
           'Verifikasi Akun',
           'verifikasi_akun',
@@ -148,7 +148,7 @@ class PenggunaService {
 
         resolve(token);
       } catch (error) {
-        reject('Gagal membuat token verifikasi');
+        throw error;
       }
     });
   }
