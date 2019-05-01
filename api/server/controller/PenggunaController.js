@@ -52,6 +52,18 @@ class PenggunaController {
 
     Response.send(res);
   }
+
+  static async getHakAkses(req, res) {
+    try {
+      let hakAkses = await PenggunaService.getHakAkses();
+
+      Response.setSuccess(200, 'Berhasil', hakAkses);
+    } catch (error) {
+      Response.setError(500, 'Error');
+    }
+
+    Response.send(res);
+  }
 }
 
 export default PenggunaController;

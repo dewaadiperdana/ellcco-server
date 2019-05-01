@@ -2,6 +2,7 @@ import randomstring from 'randomstring';
 import moment from 'moment';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import Sequelize from 'sequelize';
 
 import database from '../src/models';
 import Mail from '../utils/Mail';
@@ -11,6 +12,7 @@ import Helper from '../utils/Helper';
 dotenv.config();
 
 const mail = new Mail();
+const Op = Sequelize.Op;
 
 class PenggunaService {
   static async addPengguna(pengguna) {
@@ -174,6 +176,28 @@ class PenggunaService {
         kode = kode + Math.floor(Math.random() * (999 - 100) + 100);
 
         resolve(kode);
+      } catch (error) {
+        throw error;
+      }
+    });
+  }
+
+  static async getHakAkses() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let hakAkses = await database.HakAkses.findAll({
+          where: {
+            nama: {
+              [Op.notIn]: ['Admin']
+            }
+          }
+        });
+
+        let data = hakAkses.map(item => {
+          return item.dataValues;
+        });
+
+        resolve(data);
       } catch (error) {
         throw error;
       }
