@@ -8,15 +8,13 @@ class LayananController {
       const layanan = await LayananService.getAllLayanan();
 
       if (layanan.length > 0) {
-        Response.setSuccess(200, 'Layanan ditemukan', layanan);
+        return Response.success(res, 200, 'Layanan ditemukan', layanan);
       } else {
-        Response.setSuccess(200, 'Layanan tidak ditemukan');
+        return Response.success(res, 200, 'Layanan tidak ditemukan');
       }
-
-      return Response.send(res);
     } catch (error) {
-      Response.setError(400, error);
-      return Response.send(res);
+      throw error;
+      return Response.error(res, 500, 'Maaf sedang terjadi kesalahan');
     }
   }
 
@@ -24,61 +22,55 @@ class LayananController {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      Response.setError(422, 'Validasi gagal', errors.array());
+      return Response.error(res, 422, 'Validasi gagal', errors.array());
     } else {
       try {
         const layanan = await LayananService.addLayanan({
           nama: req.body.nama
         });
 
-        Response.setSuccess(200, 'Layanan berhasil ditambahkan', layanan.dataValues);
+        return Response.success(res, 200, 'Layanan berhasil ditambahkan', layanan.dataValues);
       } catch (error) {
-        Response.setError(500, 'Gagal menambahkan layanan');
         throw error;
+        return Response.error(res, 500, 'Gagal menambahkan layanan');
       }
     }
-
-    return Response.send(res);
   }
 
   static async updateLayanan(req, res) {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      Response.setError(422, 'Validasi gagal', errors.array());
+      return Response.error(res, 422, 'Validasi gagal', errors.array());
     } else {
       try {
         const layanan = await LayananService.updateLayanan(req.body.id, {
           nama: req.body.nama
         });
 
-        Response.setSuccess(200, 'Layanan berhasil di update', layanan.dataValues);
+        return Response.success(res, 200, 'Layanan berhasil di update', layanan.dataValues);
       } catch (error) {
-        Response.setError(500, 'Gagal mengupdate layanan', error.message);
         throw error;
+        return Response.error(res, 500, 'Gagal mengupdate layanan', error.message);
       }
     }
-
-    return Response.send(res);
   }
 
   static async deleteLayanan(req, res) {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      Response.setError(422, 'Validasi gagal', errors.array());
+      return Response.error(res, 422, 'Validasi gagal', errors.array());
     } else {
       try {
         await LayananService.deleteLayanan(req.body.id);
 
-        Response.setSuccess(200, 'Layanan berhasil di hapus');
+        return Response.success(res, 200, 'Layanan berhasil di hapus');
       } catch (error) {
-        Response.setError(500, 'Gagal menghapus layanan', error.message);
         throw error;
+        return Response.error(res, 500, 'Gagal menghapus layanan', error.message);
       }
     }
-
-    return Response.send(res);
   }
 }
 

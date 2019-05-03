@@ -11,6 +11,7 @@ module.exports = {
             defaultValue: Sequelize.literal('uuid_generate_v4()')
           },
           id_pengguna: {
+            primaryKey: true,
             type: Sequelize.UUID,
             references: {
               model: 'pengguna',

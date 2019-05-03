@@ -3,7 +3,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
       .then(() => {
-        return queryInterface.createTable('hak_akses', {
+        return queryInterface.createTable('channel_topik', {
           id: {
             allowNull: false,
             primaryKey: true,
@@ -11,7 +11,7 @@ module.exports = {
             defaultValue: Sequelize.literal('uuid_generate_v4()')
           },
           kode: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING
           },
           nama: {
             type: Sequelize.STRING
@@ -30,6 +30,6 @@ module.exports = {
       });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('hak_akses');
+    return queryInterface.dropTable('channel_topik');
   }
 };

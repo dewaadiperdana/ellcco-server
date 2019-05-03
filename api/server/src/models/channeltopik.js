@@ -1,24 +1,21 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const HakAkses = sequelize.define('HakAkses', {
+  const ChannelTopik = sequelize.define('ChannelTopik', {
     id: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
-    kode: DataTypes.INTEGER,
+    kode: DataTypes.STRING,
     nama: DataTypes.STRING
   }, {
     freezeTableName: true,
-    tableName: 'hak_akses',
+    tableName: 'channel_topik',
     underscored: true
   });
-  HakAkses.associate = function(models) {
-    HakAkses.hasMany(models.Pengguna, {
-      foreignKey: 'id_hak_akses',
-      onDelete: 'CASCADE'
-    })
+  ChannelTopik.associate = function(models) {
+    // associations can be defined here
   };
-  return HakAkses;
+  return ChannelTopik;
 };

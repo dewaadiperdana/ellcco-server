@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
-    id_pengguna: DataTypes.UUID,
+    id_pengguna: {
+      primaryKey: true,
+      type: DataTypes.UUID
+    },
     token: {
       type: DataTypes.TEXT,
       unique: true

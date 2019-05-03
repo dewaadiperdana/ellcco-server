@@ -66,6 +66,7 @@ class PenggunaService {
 
           let payload = {
             id: pengguna.id,
+            id_hak_akses: pengguna.id_hak_akses,
             nama: pengguna.nama,
             email: pengguna.email,
             aktif: pengguna.aktif,
