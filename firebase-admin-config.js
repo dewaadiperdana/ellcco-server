@@ -1,9 +1,8 @@
-import dotenv from 'dotenv';
+var dotenv = require('dotenv');
 
 dotenv.config();
 
-export default
-{
+module.exports = {
   "type": process.env.FIREBASE_ADMIN_TYPE,
   "project_id": process.env.FIREBASE_ADMIN_PROJECT_ID,
   "private_key_id": process.env.FIREBASE_ADMIN_PRIVATE_KEY_ID,
