@@ -21,7 +21,12 @@ module.exports = {
             onDelete: 'cascade'
           },
           token: {
-            type: Sequelize.TEXT
+            type: Sequelize.TEXT,
+            allowNull: true
+          },
+          socket: {
+            type: Sequelize.STRING,
+            allowNull: true
           },
           created_at: {
             allowNull: false,

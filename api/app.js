@@ -3,8 +3,12 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import hbs from 'express-handlebars';
 import http from 'http';
-import io from 'socket.io';
 import * as admin from 'firebase-admin';
+import path from 'path';
+import io from 'socket.io';
+
+import Socket from './server/sockets/Socket';
+
 import firebaseAdminConfig from '../firebase-admin-config';
 
 // Application Routes
@@ -23,7 +27,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const server = http.createServer(app);
-io(server);
+const socket = io(server);
 
 app.set('view engine', 'hbs');
 
@@ -42,13 +46,16 @@ app.use('/api/layanan', LayananRoutes);
 app.use('/api/pesanan', PesananRoutes);
 
 app.get('/', (req, res) => {
-  res.send('eLconics is comming to help you.');
+  res.sendFile(path.resolve('./index.html'));
 });
 
 server.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
 
+socket.on('connection', Socket.init);
+
 export {
   app,
-  io,
-  server
+  server,
+  admin,
+  socket
 };

@@ -25,6 +25,20 @@ class PenggunaService {
     }
   }
 
+  static async getPengguna(idPengguna) {
+    try {
+      const pengguna = await database.Pengguna.findByPk(idPengguna);
+
+      if (pengguna === null) {
+        return Promise.reject({ message: 'Pengguna tidak ditemukan' });
+      }
+
+      return Promise.resolve({ data: pengguna.dataValues });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async addVerifikasi(idPengguna) {
     try {
       let token = await this.generateTokenVerifikasi();
@@ -158,6 +172,11 @@ class PenggunaService {
     return new Promise(async (resolve, reject) => {
       try {
         let role = await database.HakAkses.findByPk(idRole);
+
+        if (role === null) {
+          return reject({ message: 'Hak akses tidak dapat ditemukan' });
+        }
+
         let kode = '';
 
         switch(role.nama) {

@@ -1,5 +1,7 @@
 import database from '../src/models';
 
+import PenggunaService from './PenggunaService';
+
 class HakAksesService {
   static async getKodeHakAkses(idHakAkses) {
     try {
@@ -10,6 +12,18 @@ class HakAksesService {
       }
 
       return Promise.resolve(hakAkses.kode);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getKodeByIdPengguna(idPengguna) {
+    try {
+      const pengguna = await PenggunaService.getPengguna(idPengguna);
+      const kode = await HakAksesService.getKodeHakAkses(pengguna.data.id_hak_akses);
+      console.log(kode);
+
+      return Promise.resolve({ kode: kode });
     } catch (error) {
       throw error;
     }

@@ -10,14 +10,18 @@ class PenggunaController {
    if (!errors.isEmpty()) {
     return Response.error(res, 422, 'Validasi gagal', errors.array());
    } else {
-    let kode = await PenggunaService.generateKodePengguna(req.body.id_hak_akses);
-    let dataPengguna = {kode_pengguna: kode, ...req.body};
-    let pengguna = await PenggunaService.addPengguna(dataPengguna);
-    let verifikasi = await PenggunaService.addVerifikasi(pengguna.id);
+    try {
+      let kode = await PenggunaService.generateKodePengguna(req.body.id_hak_akses);
+      let dataPengguna = {kode_pengguna: kode, ...req.body};
+      let pengguna = await PenggunaService.addPengguna(dataPengguna);
+      let verifikasi = await PenggunaService.addVerifikasi(pengguna.id);
 
-    await PenggunaService.sendEmailVerifikasi(pengguna, verifikasi);
+      await PenggunaService.sendEmailVerifikasi(pengguna, verifikasi);
 
-    return Response.success(res, 200, 'Registrasi berhasil', null);
+      return Response.success(res, 200, 'Registrasi berhasil', null);
+    } catch (error) {
+      return Response.error(res, 500, error.message);
+    }
    }
   }
 

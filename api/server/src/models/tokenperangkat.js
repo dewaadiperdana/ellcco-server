@@ -8,7 +8,14 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4
     },
     id_pengguna: DataTypes.UUID,
-    token: DataTypes.TEXT
+    token: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    socket: {
+      type: DataTypes.STRING,
+      allowNull: true
+    }
   }, {
     freezeTableName: true,
     tableName: 'token_perangkat',
