@@ -33,10 +33,14 @@ class PenggunaService {
         return Promise.reject({ message: 'Pengguna tidak ditemukan' });
       }
 
-      return Promise.resolve({ data: pengguna.dataValues });
+      return Promise.resolve(pengguna.dataValues);
     } catch (error) {
       throw error;
     }
+  }
+
+  static async getPesananPengguna(idPengguna) {
+    
   }
 
   static async addVerifikasi(idPengguna) {
@@ -142,7 +146,7 @@ class PenggunaService {
         };
 
         let send = await mail.send(
-          'Admin eLconics <hello@elconics.herokuapp.com>',
+          'Admin Ellcco <hello@ellcco.herokuapp.com>',
           pengguna.email,
           'Verifikasi Akun',
           'verifikasi_akun',

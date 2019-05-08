@@ -1,19 +1,22 @@
-import { socket, admin } from '../../app';
-import { ON_NEW_ORDER } from '../sockets/events';
-import { pesanan } from '../sockets/topics';
+import { admin } from '../../app';
+import NewOrder from '../sockets/emitters/NewOrder';
+import PenggunaService from '../services/PenggunaService';
 
 class PesananController {
   static async pesan(req, res) {
     const message = {
+      notification: {
+        title: 'Pesanan Baru',
+        body: 'Pesanan baru bro'
+      },
       data: {
-        id_pelanggan: req.body.id_pelanggan
+        id_pelanggan: "alsdkalskd"
       },
       topic: 'pesanan'
     };
 
-    const messagePesanan = await admin.messaging().send(message);
-
-    console.log(messagePesanan);
+    await admin.messaging().send(message);
+    NewOrder.emit(message.data);
 
     res.send('Pesan layanan');
   }

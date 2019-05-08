@@ -21,11 +21,20 @@ class HakAksesService {
     try {
       const pengguna = await PenggunaService.getPengguna(idPengguna);
       const kode = await HakAksesService.getKodeHakAkses(pengguna.data.id_hak_akses);
-      console.log(kode);
 
       return Promise.resolve({ kode: kode });
     } catch (error) {
       throw error;
+    }
+  }
+
+  static async getIdHakAksesByKode(kode) {
+    try {
+      const hakAkses = await database.HakAkses.findOne({ where: { kode: kode } });
+
+      return Promise.resolve(hakAkses.dataValues);
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 }

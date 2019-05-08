@@ -44,7 +44,6 @@ export default class Mail {
         }
 
         resolve(response);
-        console.log(response);
         this.transport.close();
       });
     });

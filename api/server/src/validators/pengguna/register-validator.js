@@ -19,7 +19,9 @@ export default class RegisterValidator {
           }
         }),
       check('password')
-        .not().isEmpty().withMessage('Password tidak boleh kosong')
+        .not().isEmpty().withMessage('Password tidak boleh kosong'),
+      check('alamat')
+        .not().isEmpty().withMessage('Alamat tidak boleh kosong')
     ];
   }
 }

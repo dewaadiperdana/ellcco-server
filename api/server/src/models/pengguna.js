@@ -50,6 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     });
 
+    Pengguna.hasOne(models.TokenPerangkat, {
+      foreignKey: 'id_pengguna',
+      onDelete: 'CASCADE'
+    });
+
     Pengguna.hasMany(models.Pesanan, {
       foreignKey: 'id_pelanggan',
       onDelete: 'CASCADE'
