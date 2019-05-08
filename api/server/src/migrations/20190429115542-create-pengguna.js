@@ -24,14 +24,17 @@ module.exports = {
             unique: true
           },
           nama: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
           },
           email: {
             type: Sequelize.STRING,
-            unique: true
+            unique: true,
+            allowNull: false
           },
           password: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
           },
           tgl_registrasi: {
             type: Sequelize.DATE,
@@ -40,6 +43,10 @@ module.exports = {
           aktif: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
+          },
+          alamat: {
+            type: Sequelize.TEXT,
+            allowNull: false
           },
           created_at: {
             allowNull: false,

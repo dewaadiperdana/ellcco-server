@@ -12,16 +12,27 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true
     },
-    nama: DataTypes.STRING,
+    nama: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     email: {
       type: DataTypes.STRING,
-      unique: true
+      unique: true,
+      allowNull: false
     },
-    password: DataTypes.STRING,
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     tgl_registrasi: DataTypes.DATE,
     aktif: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    alamat: {
+      type: DataTypes.TEXT,
+      allowNull: false
     }
   }, {
     freezeTableName: true,
