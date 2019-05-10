@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
     },
     id_pengguna: DataTypes.UUID,
     judul: DataTypes.STRING,
@@ -13,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     dibaca: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    data: {
+      type: DataTypes.TEXT,
+      allowNull: true
     }
   }, {
     freezeTableName: true,

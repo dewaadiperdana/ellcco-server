@@ -13,7 +13,6 @@ class LayananController {
         return Response.success(res, 200, 'Layanan tidak ditemukan');
       }
     } catch (error) {
-      throw error;
       return Response.error(res, 500, 'Maaf sedang terjadi kesalahan');
     }
   }
@@ -31,7 +30,6 @@ class LayananController {
 
         return Response.success(res, 200, 'Layanan berhasil ditambahkan', layanan.dataValues);
       } catch (error) {
-        throw error;
         return Response.error(res, 500, 'Gagal menambahkan layanan');
       }
     }
@@ -50,7 +48,6 @@ class LayananController {
 
         return Response.success(res, 200, 'Layanan berhasil di update', layanan.dataValues);
       } catch (error) {
-        throw error;
         return Response.error(res, 500, 'Gagal mengupdate layanan', error.message);
       }
     }
@@ -67,7 +64,6 @@ class LayananController {
 
         return Response.success(res, 200, 'Layanan berhasil di hapus');
       } catch (error) {
-        throw error;
         return Response.error(res, 500, 'Gagal menghapus layanan', error.message);
       }
     }

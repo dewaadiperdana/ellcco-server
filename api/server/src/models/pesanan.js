@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
     },
     id_tukang: DataTypes.UUID,
     id_pelanggan: DataTypes.UUID,

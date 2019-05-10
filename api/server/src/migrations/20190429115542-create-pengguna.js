@@ -48,6 +48,10 @@ module.exports = {
             type: Sequelize.TEXT,
             allowNull: false
           },
+          no_telp: {
+            type: Sequelize.CHAR,
+            allowNull: false
+          },
           created_at: {
             allowNull: false,
             type: Sequelize.DATE,

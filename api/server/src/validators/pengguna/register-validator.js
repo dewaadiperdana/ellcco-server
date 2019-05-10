@@ -21,7 +21,10 @@ export default class RegisterValidator {
       check('password')
         .not().isEmpty().withMessage('Password tidak boleh kosong'),
       check('alamat')
-        .not().isEmpty().withMessage('Alamat tidak boleh kosong')
+        .not().isEmpty().withMessage('Alamat tidak boleh kosong'),
+      check('no_telp')
+        .not().isEmpty().withMessage('No Telp tidak boleh kosong')
+        .isInt().withMessage('No telp hanya boleh mengandung angka')
     ];
   }
 }

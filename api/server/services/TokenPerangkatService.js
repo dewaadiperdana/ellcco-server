@@ -1,6 +1,6 @@
 import db from '../src/models';
 import HakAksesService from './HakAksesService';
-import { admin } from '../../app';
+import { admin, socket } from '../../app';
 
 class TokenPerangkatService {
   static async simpanToken(idPengguna, token) {

@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
     alamat: {
       type: DataTypes.TEXT,
       allowNull: false
+    },
+    no_telp: {
+      type: DataTypes.CHAR,
+      allowNull: false
     }
   }, {
     freezeTableName: true,

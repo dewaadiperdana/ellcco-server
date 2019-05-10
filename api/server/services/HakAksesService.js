@@ -20,7 +20,7 @@ class HakAksesService {
   static async getKodeByIdPengguna(idPengguna) {
     try {
       const pengguna = await PenggunaService.getPengguna(idPengguna);
-      const kode = await HakAksesService.getKodeHakAkses(pengguna.data.id_hak_akses);
+      const kode = await HakAksesService.getKodeHakAkses(pengguna.id_hak_akses);
 
       return Promise.resolve({ kode: kode });
     } catch (error) {
@@ -32,7 +32,7 @@ class HakAksesService {
     try {
       const hakAkses = await database.HakAkses.findOne({ where: { kode: kode } });
 
-      return Promise.resolve(hakAkses.dataValues);
+      return Promise.resolve(hakAkses === null ? hakAkses : hakAkses.dataValues);
     } catch (error) {
       return Promise.reject(error);
     }

@@ -26,11 +26,16 @@ module.exports = {
             type: Sequelize.TEXT
           },
           tanggal: {
-            type: Sequelize.DATE
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.literal('NOW()')
           },
           dibaca: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
+          },
+          data: {
+            type: DataTypes.TEXT,
+            allowNull: true
           },
           created_at: {
             allowNull: false,

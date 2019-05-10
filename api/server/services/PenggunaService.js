@@ -4,10 +4,11 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import Sequelize from 'sequelize';
 
-import database from '../src/models';
+import db from '../src/models';
 import Mail from '../utils/Mail';
 import Hash from '../utils/Hash';
 import Helper from '../utils/Helper';
+import HakAksesService from '../services/HakAksesService';
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ class PenggunaService {
     try {
       pengguna.password = await Hash.make(pengguna.password);
 
-      return await database.Pengguna.create(pengguna);
+      return await db.Pengguna.create(pengguna);
     } catch (error) {
       throw error;
     }
@@ -27,7 +28,7 @@ class PenggunaService {
 
   static async getPengguna(idPengguna) {
     try {
-      const pengguna = await database.Pengguna.findByPk(idPengguna);
+      const pengguna = await db.Pengguna.findByPk(idPengguna);
 
       if (pengguna === null) {
         return Promise.reject({ message: 'Pengguna tidak ditemukan' });
@@ -48,7 +49,7 @@ class PenggunaService {
       let token = await this.generateTokenVerifikasi();
       let tglBerlakuToken = moment().add(30, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 
-      return await database.VerifikasiAkun.create({
+      return await db.VerifikasiAkun.create({
         id_pengguna: idPengguna,
         token: token,
         tanggal_berlaku: tglBerlakuToken
@@ -61,7 +62,7 @@ class PenggunaService {
   static async login(data) {
     return new Promise(async (resolve, reject) => {
       try {
-        let pengguna = await database.Pengguna.findOne({ where: { email: data.email } });
+        let pengguna = await db.Pengguna.findOne({ where: { email: data.email } });
 
         if (pengguna === null) {
           reject({
@@ -104,7 +105,7 @@ class PenggunaService {
   static async verifikasiToken(token) {
     return new Promise(async (resolve, reject) => {
       try {
-        let verifikasi = await database.VerifikasiAkun.findOne({ where: { token: token } });
+        let verifikasi = await db.VerifikasiAkun.findOne({ where: { token: token } });
   
         if (verifikasi === null) {
           reject({
@@ -114,18 +115,18 @@ class PenggunaService {
           let expired = moment().isAfter(verifikasi.tanggal_berlaku);
 
           if (expired) {
-            await database.VerifikasiAkun.destroy({ where: { id: verifikasi.id } });
+            await db.VerifikasiAkun.destroy({ where: { id: verifikasi.id } });
 
             reject({
               message: 'Token verifikasi sudah kadaluarsa'
             });
           } else {
-            await database.Pengguna.update(
+            await db.Pengguna.update(
               { aktif: true },
               { where: { id: verifikasi.id_pengguna } }
             );
 
-            await database.VerifikasiAkun.destroy({ where: { id: verifikasi.id } });
+            await db.VerifikasiAkun.destroy({ where: { id: verifikasi.id } });
 
             resolve(true);
           }
@@ -173,59 +174,89 @@ class PenggunaService {
   }
 
   static async generateKodePengguna(idRole) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let role = await database.HakAkses.findByPk(idRole);
+    try {
+      let role = await db.HakAkses.findByPk(idRole);
 
-        if (role === null) {
-          return reject({ message: 'Hak akses tidak dapat ditemukan' });
-        }
-
-        let kode = '';
-
-        switch(role.nama) {
-          case 'Admin':
-            kode = 'AD-';
-            break;
-          case 'Tukang':
-            kode = 'TK-';
-            break;
-          case 'Pelanggan':
-            kode = 'PL-';
-            break;
-          default:
-            kode = 0;
-        }
-
-        kode = kode + Math.floor(Math.random() * (999 - 100) + 100);
-
-        resolve(kode);
-      } catch (error) {
-        throw error;
+      if (role === null) {
+        return Promise.reject({ message: 'Hak akses tidak dapat ditemukan' });
       }
-    });
+
+      let kode = '';
+      let random = randomstring.generate(6);
+
+      switch(role.nama) {
+        case 'Admin':
+          kode = 'AD-';
+          break;
+        case 'Tukang':
+          kode = 'TK-';
+          break;
+        case 'Pelanggan':
+          kode = 'PL-';
+          break;
+        default:
+          kode = 0;
+      }
+
+      kode = kode + random.toUpperCase();
+
+      return Promise.resolve(kode);
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   static async getHakAkses() {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let hakAkses = await database.HakAkses.findAll({
-          where: {
-            nama: {
-              [Op.notIn]: ['Admin']
-            }
+    try {
+      let hakAkses = await db.HakAkses.findAll({
+        where: {
+          nama: {
+            [Op.notIn]: ['Admin']
           }
-        });
+        }
+      });
 
-        let data = hakAkses.map(item => {
-          return item.dataValues;
-        });
+      let data = hakAkses.map(item => {
+        return item.dataValues;
+      });
 
-        resolve(data);
-      } catch (error) {
-        throw error;
+      return Promise.resolve(data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  static async getAllTukang(includes = null) {
+    try {
+      const hakAksesTukang = await HakAksesService.getIdHakAksesByKode(1);
+      let operators = {
+        include: includes,
+        where: { id_hak_akses: hakAksesTukang.id }
+      };
+
+      const tukang = await db.Pengguna.findAll(operators);
+      const returnData = tukang.map(item => {
+        return item.dataValues;
+      });
+
+      return Promise.resolve(tukang === null ? tukang : returnData);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  static async isTukang(idPengguna) {
+    try {
+      const kode = await HakAksesService.getKodeByIdPengguna(idPengguna);
+
+      if (Number.parseInt(kode.kode) === 1) {
+        return Promise.resolve(true);
+      } else {
+        return Promise.resolve(false);
       }
-    });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 }
 
