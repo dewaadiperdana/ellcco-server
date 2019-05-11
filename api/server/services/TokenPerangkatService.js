@@ -3,19 +3,18 @@ import HakAksesService from './HakAksesService';
 import { admin, socket } from '../../app';
 
 class TokenPerangkatService {
-  static async simpanToken(idPengguna, token) {
+  static async simpanToken(data) {
     try {
-      const tokenPerangkat = await db.TokenPerangkat.findOne({ where: { id_pengguna: idPengguna } });
+      const tokenPerangkat = await db.TokenPerangkat.findOne({ where: { id_pengguna: data.id_pengguna } });
 
       if (tokenPerangkat === null) {
-        await db.TokenPerangkat.create({
-          id_pengguna: idPengguna,
-          token: token
-        });
+        await db.TokenPerangkat.create(data);
       } else {
-        if (tokenPerangkat.token !== token) {
+        const key = 'token' in data ? 'token' : 'socket' in data ? 'socket' : 'token';
+
+        if (tokenPerangkat[key] !== data[key]) {
           await db.TokenPerangkat.update({
-            token: token
+            [key]: data[key]
           }, { where: { id_pengguna: idPengguna } });
         }
       }

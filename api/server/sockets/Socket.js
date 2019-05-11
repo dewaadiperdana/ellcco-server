@@ -11,26 +11,30 @@ import onNewSocketID from './listeners/OnNewSocketID';
 
 class Socket {
   static init(socket) {
+    Socket.onNewSocketId(socket);
+    socket.on(ON_NEW_FCM_TOKEN, onNewFCMToken);
+  }
+
+  static onNewSocketId(socket) {
     socket.on(ON_NEW_SOCKET_ID, async payload => {
       try {
         const data = JSON.parse(payload);
-        const isTukang = PenggunaService.isTukang(payload.id_pengguna);
+        console.log(data);
+        const isTukang = await PenggunaService.isTukang(payload.id_pengguna);
 
-        await TokenPerangkatService.simpanSocketId(data.id_pengguna, data.socket_id);
+        await TokenPerangkatService.simpanToken({
+          id_pengguna: data.id_pengguna,
+          socket: data.socket
+        });
 
         if (isTukang) {
-          socket.join('room_pesanan', () => {
-            let rooms = Object.keys(socket.rooms);
-            console.log(rooms);
-          })
+          socket.join('room_pesanan');
         }
 
       } catch (error) {
         throw error;
       }
     });
-
-    socket.on(ON_NEW_FCM_TOKEN, onNewFCMToken);
   }
 }
 

@@ -255,6 +255,7 @@ class PenggunaService {
         return Promise.resolve(false);
       }
     } catch (error) {
+      throw error;
       return Promise.reject(error);
     }
   }
