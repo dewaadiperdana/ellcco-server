@@ -9,11 +9,11 @@ export default class Mail {
     this.options = {
       viewEngine: {
         extname: '.hbs',
-        layoutsDir: __dirname + '/../src/views/layouts/',
+        layoutsDir: __dirname + '/../views/layouts/',
         defaultLayout: 'email',
-        partialsDir: __dirname + '/../src/views/partrials/'
+        partialsDir: __dirname + '/../views/partrials/'
       },
-      viewPath: __dirname + '/../src/views/emails',
+      viewPath: __dirname + '/../views/emails',
       extName: '.hbs'
     };
 

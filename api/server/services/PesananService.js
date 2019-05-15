@@ -1,5 +1,5 @@
 import randomstring from 'randomstring';
-import db from '../src/models';
+import db from '../models';
 
 import StatusPesananService from './StatusPesananService';
 

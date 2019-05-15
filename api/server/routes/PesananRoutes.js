@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import PesananController from '../controller/PesananController';
 import { AuthorizationMiddleware, PelangganMiddleware } from '../middlewares';
-import { PesanValidator } from '../src/validators/pesanan';
+import { PesanValidator } from '../validators/pesanan';
 
 const router = Router();
 

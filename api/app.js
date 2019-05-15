@@ -9,7 +9,7 @@ import io from 'socket.io';
 
 import Socket from './server/sockets/Socket';
 
-import firebaseAdminConfig from '../firebase-admin-config';
+import firebaseAdminConfig from './server/config/firebase';
 
 // Application Routes
 import LayananRoutes from './server/routes/LayananRoutes';
@@ -34,8 +34,8 @@ app.set('view engine', 'hbs');
 app.engine('hbs', hbs( {
   extname: 'hbs',
   defaultView: 'default',
-  layoutsDir: __dirname + '/server/src/views/layouts/',
-  partialsDir: __dirname + '/server/src/views/partials/'
+  layoutsDir: __dirname + '/server/views/layouts/',
+  partialsDir: __dirname + '/server/views/partials/'
 }));
 
 app.use(bodyParser.json());

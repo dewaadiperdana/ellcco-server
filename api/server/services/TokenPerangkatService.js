@@ -1,4 +1,4 @@
-import db from '../src/models';
+import db from '../models';
 import HakAksesService from './HakAksesService';
 import { admin, socket } from '../../app';
 

@@ -4,7 +4,7 @@ import {
   AddLayananValidator,
   UpdateLayananValidator,
   DeleteLayananValidator
-} from '../src/validators/layanan';
+} from '../validators/layanan';
 
 const router = Router();
 

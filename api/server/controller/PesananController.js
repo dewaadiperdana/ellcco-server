@@ -23,7 +23,7 @@ class PesananController {
       const message = {
         notification: {
           title: 'Pesanan Baru',
-          body: 'Pelanggan baru saja membuat pesanan layanan'
+          body: 'Pelanggan baru saja memesan layanan'
         },
         data: {
           pesanan: JSON.stringify(pesanan)

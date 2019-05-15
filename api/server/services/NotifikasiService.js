@@ -1,5 +1,5 @@
-import db from '../src/models';
-import PenggunaService from '../services/PenggunaService';
+import db from '../models';
+import PenggunaService from './PenggunaService';
 import Order from '../sockets/emitters/Order';
 
 export default class NotifikasiService {

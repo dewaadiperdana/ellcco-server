@@ -1,4 +1,4 @@
-import db from '../src/models';
+import db from '../models';
 
 export default class StatusPesananService {
   static async getDefaultStatus() {

@@ -8,7 +8,20 @@ class PenggunaController {
     const errors = validationResult(req);
 
    if (!errors.isEmpty()) {
-    return Response.error(res, 422, 'Validasi gagal', errors.array());
+    const errorsArray = errors.array();
+    let responseErrors = {};
+
+    for(let error in errorsArray) {
+      responseErrors = {
+        ...responseErrors,
+        [errorsArray[error].param]: {
+          key: errorsArray[error].param,
+          message: errorsArray[error].msg
+        }
+      };
+    }
+
+    return Response.error(res, 422, 'Validasi gagal', JSON.stringify(responseErrors));
    } else {
     try {
       let kode = await PenggunaService.generateKodePengguna(req.body.id_hak_akses);

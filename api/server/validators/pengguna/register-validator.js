@@ -5,7 +5,7 @@ export default class RegisterValidator {
   static validate() {
     return [
       check('id_hak_akses')
-        .not().isEmpty().withMessage('Id hak akses tidak boleh kosong'),
+        .not().isEmpty().withMessage('Hak akses tidak boleh kosong'),
       check('nama')
         .not().isEmpty().withMessage('Nama tidak boleh kosong'),
       check('email')
