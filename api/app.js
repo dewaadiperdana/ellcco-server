@@ -46,7 +46,7 @@ app.use('/api/layanan', LayananRoutes);
 app.use('/api/pesanan', PesananRoutes);
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve('./index.html'));
+  res.send('Ellcco is on development');
 });
 
 server.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
