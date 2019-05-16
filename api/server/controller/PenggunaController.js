@@ -2,26 +2,16 @@ import { validationResult } from 'express-validator/check';
 
 import PenggunaService from '../services/PenggunaService';
 import Response from '../utils/Response';
+import ValidationError from '../utils/ValidationError';
 
 class PenggunaController {
   static async register(req, res) {
     const errors = validationResult(req);
 
    if (!errors.isEmpty()) {
-    const errorsArray = errors.array();
-    let responseErrors = {};
+    const errorsArray = ValidationError.format(errors.array());
 
-    for(let error in errorsArray) {
-      responseErrors = {
-        ...responseErrors,
-        [errorsArray[error].param]: {
-          key: errorsArray[error].param,
-          message: errorsArray[error].msg
-        }
-      };
-    }
-
-    return Response.error(res, 422, 'Validasi gagal', JSON.stringify(responseErrors));
+    return Response.error(res, 422, 'Validasi gagal', errorsArray);
    } else {
     try {
       let kode = await PenggunaService.generateKodePengguna(req.body.id_hak_akses);
@@ -42,14 +32,16 @@ class PenggunaController {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return Response.error(422, 'Validasi gagal', errors.array());
+      const errorsArray = ValidationError.format(errors.array());
+
+      return Response.error(res, 422, 'Validasi gagal', errorsArray);
     } else {
       try {
         let login = await PenggunaService.login(req.body);
 
-        return Response.success(res, 200, 'Login berhasil', { token: login });
+        return Response.success(res, 200, 'Login berhasil', login);
       } catch (error) {
-        return Response.error(res, 500, error.message);
+        return Response.error(res, 500, 'Login gagal', error);
       }
     }
   }
@@ -72,6 +64,15 @@ class PenggunaController {
     } catch (error) {
       return Response.error(res, 500, 'Error');
     }
+  }
+
+  static async isAuthenticated(req, res) {
+      const header = await req.get('Authorization');
+      const token = header.split(' ')[1];
+
+      const check = await PenggunaService.checkAuthToken(token);
+
+      return Response.success(res, 200, 'Berhasil', { isAuthenticated: check });
   }
 }
 

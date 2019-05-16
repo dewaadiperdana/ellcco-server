@@ -3,7 +3,7 @@ export default class Response {
     return response.status(code).json({
       type: 'success',
       message: message,
-      data: data
+      data: JSON.stringify(data)
     });
   }
 
@@ -11,7 +11,7 @@ export default class Response {
     return response.status(code).json({
       type: 'error',
       message: message,
-      data: data
+      data: JSON.stringify(data)
     });
   }
 }

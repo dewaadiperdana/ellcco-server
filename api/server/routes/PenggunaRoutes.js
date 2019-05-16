@@ -8,5 +8,6 @@ routes.post('/register', RegisterValidator.validate(), PenggunaController.regist
 routes.post('/login', LoginValidator.validate(), PenggunaController.login);
 routes.get('/verifikasi/:token', PenggunaController.verifikasi);
 routes.get('/hakakses', PenggunaController.getHakAkses);
+routes.post('/is-authenticated', PenggunaController.isAuthenticated);
 
 export default routes;

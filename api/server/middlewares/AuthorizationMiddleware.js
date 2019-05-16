@@ -5,7 +5,7 @@ import Response from '../utils/Response';
 dotenv.config();
 
 export default class AuthorizationMiddleware {
-  static async isAuthenticated(req, res, next) {
+  static isAuthenticated(req, res, next) {
     const authorization = req.get('Authorization');
 
     if (authorization === undefined) {

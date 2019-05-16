@@ -60,46 +60,60 @@ class PenggunaService {
   }
 
   static async login(data) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let pengguna = await db.Pengguna.findOne({ where: { email: data.email } });
+    try {
+      let pengguna = await db.Pengguna.findOne({
+        where: { email: data.email },
+        include: [db.HakAkses]
+      });
 
-        if (pengguna === null) {
-          reject({
+      if (pengguna === null) {
+        return Promise.reject({
+          modal: {
+            key: 'modal',
             message: 'Akun tidak ditemukan'
-          });
-        } else {
-          let passwordMatch = await Hash.check(data.password, pengguna.password);
+          }
+        });
+      } else {
+        let passwordMatch = await Hash.check(data.password, pengguna.password);
 
-          if (!passwordMatch) {
-            reject({
+        if (!passwordMatch) {
+          return Promise.reject({
+            modal: {
+              key: 'modal',
               message: 'Password salah'
-            });
-          }
-
-          if(!pengguna.aktif) {
-            reject({
-              message: 'Akun sedang tidak aktif'
-            });
-          }
-
-          let payload = {
-            id: pengguna.id,
-            id_hak_akses: pengguna.id_hak_akses,
-            nama: pengguna.nama,
-            email: pengguna.email,
-            aktif: pengguna.aktif,
-            tgl_registrasi: pengguna.tgl_registrasi
-          };
-
-          let token = jwt.sign(payload, process.env.SECRET_KEY);
-
-          resolve(token);
+            }
+          });
         }
-      } catch (error) {
-        throw error;
+
+        if(!pengguna.aktif) {
+          return Promise.reject({
+            modal: {
+              key: 'modal',
+              message: 'Akun sedang tidak aktif'
+            }
+          });
+        }
+
+        let payload = {
+          id: pengguna.id,
+          id_hak_akses: pengguna.id_hak_akses,
+          kode_hak_akses: pengguna.HakAkse.dataValues.kode,
+          nama: pengguna.nama,
+          email: pengguna.email,
+          aktif: pengguna.aktif,
+          tgl_registrasi: pengguna.tgl_registrasi,
+        };
+
+        let token = jwt.sign(payload, process.env.SECRET_KEY);
+
+        return Promise.resolve({
+          ...payload,
+          token
+        });
       }
-    });
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async verifikasiToken(token) {
@@ -255,8 +269,18 @@ class PenggunaService {
         return Promise.resolve(false);
       }
     } catch (error) {
-      throw error;
+      console.log(error);
       return Promise.reject(error);
+    }
+  }
+
+  static async checkAuthToken(token) {
+    try {
+      const verified = jwt.verify(token, process.env.SECRET_KEY);
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.resolve(false);
     }
   }
 }

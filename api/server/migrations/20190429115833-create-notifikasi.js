@@ -34,7 +34,7 @@ module.exports = {
             defaultValue: false
           },
           data: {
-            type: DataTypes.TEXT,
+            type: Sequelize.TEXT,
             allowNull: true
           },
           created_at: {
