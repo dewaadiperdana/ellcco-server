@@ -2,6 +2,7 @@ import randomstring from 'randomstring';
 import db from '../models';
 
 import StatusPesananService from './StatusPesananService';
+import NotifikasiService from './NotifikasiService';
 
 export default class PesananService {
   static async addPesanan(dataPesanan) {
@@ -52,7 +53,7 @@ export default class PesananService {
 
       return Promise.resolve(returnHistori);
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -84,6 +85,13 @@ export default class PesananService {
           id: idPesanan
         }
       });
+
+      await NotifikasiService.addNotifikasi({
+        id_pengguna: pesanan.dataValues.id_pelanggan,
+        judul: 'Pesanan Diterima',
+        deskripsi: 'Pesanan anda telah diterima'
+      }, pesanan);
+      await NotifikasiService.notifikasiPenerimaanPesanan(pesanan.dataValues.id_pelanggan, pesanan);
     } catch (error) {
       throw error;
     }
