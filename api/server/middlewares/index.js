@@ -1,7 +1,7 @@
-import PelangganMiddleware from './PelangganMiddleware';
+import PenggunaMiddleware from './PenggunaMiddleware';
 import AuthorizationMiddleware from './AuthorizationMiddleware';
 
 export {
-  PelangganMiddleware,
+  PenggunaMiddleware,
   AuthorizationMiddleware
 };

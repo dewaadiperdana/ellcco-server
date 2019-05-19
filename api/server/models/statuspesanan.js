@@ -6,7 +6,9 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    nama: DataTypes.STRING
+    nama: DataTypes.STRING,
+    kode: DataTypes.INTEGER,
+    icon: DataTypes.STRING
   }, {
     freezeTableName: true,
     tableName: 'status_pesanan',

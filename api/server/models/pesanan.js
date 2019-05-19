@@ -16,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     tanggal: DataTypes.DATE,
-    biaya: DataTypes.INTEGER
+    biaya: DataTypes.INTEGER,
+    nama_kerusakan: DataTypes.STRING,
+    deskripsi_kerusakan: DataTypes.TEXT
   }, {
     freezeTableName: true,
     tableName: 'pesanan',

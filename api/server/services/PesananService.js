@@ -22,6 +22,73 @@ export default class PesananService {
     }
   }
 
+  static async getHistoriPengguna(type, idPengguna) {
+    try {
+      const histori = await db.Pesanan.findAll({
+        where: {
+          [`id_${type}`]: idPengguna
+        },
+        include: [db.StatusPesanan]
+      });
+
+      const returnHistori = histori.length <= 0 ? null : histori.map(item => {
+        return {
+          id: item.dataValues.id,
+          id_tukang: item.dataValues.id_tukang,
+          id_pelanggan: item.dataValues.id_pelanggan,
+          id_layanan: item.dataValues.id_layanan,
+          kode_pesanan: item.dataValues.kode_pesanan,
+          tanggal: item.dataValues.tanggal,
+          biaya: item.dataValues.biaya,
+          nama_kerusakan: item.dataValues.nama_kerusakan,
+          deskripsi_kerusakan: item.dataValues.deskripsi_kerusakan,
+          createdAt: item.dataValues.createdAt,
+          updatedAt: item.dataValues.updatedAt,
+          nama_status: item.StatusPesanan.dataValues.nama,
+          kode_status: item.StatusPesanan.dataValues.kode,
+          icon_status: item.StatusPesanan.dataValues.icon
+        };
+      });
+
+      return Promise.resolve(returnHistori);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  static async terimaPesanan(idPesanan, idPengguna) {
+    try {
+      const pesanan = await db.Pesanan.findOne({
+        where: {
+          id: idPesanan
+        },
+        include: [db.StatusPesanan]
+      });
+
+      const status = await StatusPesananService.getStatusByKode(2);
+
+      if (pesanan.StatusPesanan.dataValues.kode !== 1 && pesanan.id_tukang !== null) {
+        return Promise.reject({
+          modal: {
+            key: 'modal',
+            message: 'Pesanan sudah diterima'
+          }
+        });
+      }
+
+      await db.Pesanan.update({
+        id_tukang: idPengguna,
+        id_status: status.id
+      }, {
+        where: {
+          id: idPesanan
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static generateKodePesanan() {
     let kode = 'PS-';
     let random = randomstring.generate(12);

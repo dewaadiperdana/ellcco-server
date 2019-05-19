@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const TokenPerangkat = sequelize.define('TokenPerangkat', {
+  const Perangkat = sequelize.define('Perangkat', {
     id: {
       allowNull: false,
       primaryKey: true,
@@ -18,14 +18,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     freezeTableName: true,
-    tableName: 'token_perangkat',
+    tableName: 'perangkat',
     underscored: true
   });
-  TokenPerangkat.associate = function(models) {
-    TokenPerangkat.belongsTo(models.Pengguna, {
+  Perangkat.associate = function(models) {
+    Perangkat.belongsTo(models.Pengguna, {
       foreignKey: 'id_pengguna',
       onDelete: 'CASCADE'
     });
   };
-  return TokenPerangkat;
+  return Perangkat;
 };

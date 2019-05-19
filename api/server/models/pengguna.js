@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     });
 
-    Pengguna.hasOne(models.TokenPerangkat, {
+    Pengguna.hasOne(models.Perangkat, {
       foreignKey: 'id_pengguna',
       onDelete: 'CASCADE'
     });

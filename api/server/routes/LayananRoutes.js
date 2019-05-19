@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 
-router.get('/', LayananController.getAllLayanan);
+router.get('/:limit?', LayananController.getAllLayanan);
 router.post('/', AddLayananValidator.validate() , LayananController.addLayanan);
 router.put('/', UpdateLayananValidator.validate(), LayananController.updateLayanan);
 router.delete('/', DeleteLayananValidator.validate(), LayananController.deleteLayanan);

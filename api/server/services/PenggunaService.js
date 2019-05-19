@@ -98,6 +98,7 @@ class PenggunaService {
           id: pengguna.id,
           id_hak_akses: pengguna.id_hak_akses,
           kode_hak_akses: pengguna.HakAkse.dataValues.kode,
+          hak_akses: pengguna.HakAkse.dataValues.nama.toLowerCase(),
           nama: pengguna.nama,
           email: pengguna.email,
           aktif: pengguna.aktif,

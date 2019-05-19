@@ -4,8 +4,10 @@ import { validationResult } from 'express-validator/check';
 
 class LayananController {
   static async getAllLayanan(req, res) {
+    const limit = 'limit' in req.params ? req.params.limit : null;
+
     try {
-      const layanan = await LayananService.getAllLayanan();
+      const layanan = await LayananService.getAllLayanan(limit);
 
       if (layanan.length > 0) {
         return Response.success(res, 200, 'Layanan ditemukan', layanan);

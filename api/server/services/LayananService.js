@@ -1,8 +1,12 @@
 import database from '../models';
 
 class LayananService {
-  static async getAllLayanan() {
+  static async getAllLayanan(limit) {
     try {
+      if(limit !== null) {
+        return await database.Layanan.findAll({ limit });
+      }
+
       return await database.Layanan.findAll();
     } catch(error) {
       throw error;                

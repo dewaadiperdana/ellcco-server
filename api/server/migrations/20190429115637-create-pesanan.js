@@ -57,6 +57,12 @@ module.exports = {
           biaya: {
             type: Sequelize.INTEGER
           },
+          nama_kerusakan: {
+            type: Sequelize.STRING
+          },
+          deskripsi_kerusakan: {
+            type: Sequelize.TEXT
+          },
           created_at: {
             allowNull: false,
             type: Sequelize.DATE,

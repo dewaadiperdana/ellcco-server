@@ -1,15 +1,23 @@
 import { Router } from 'express';
 import PesananController from '../controller/PesananController';
-import { AuthorizationMiddleware, PelangganMiddleware } from '../middlewares';
-import { PesanValidator } from '../validators/pesanan';
+import { AuthorizationMiddleware, PenggunaMiddleware } from '../middlewares';
+import { PesanValidator, TerimaValidator } from '../validators/pesanan';
 
 const router = Router();
 
 router.post('/pesan', [
   AuthorizationMiddleware.isAuthenticated,
-  PelangganMiddleware.isPelanggan,
+  PenggunaMiddleware.isPelanggan,
   PesanValidator.validate()
 ], PesananController.pesan);
-router.post('/terima', [], PesananController.terima);
+router.post('/terima', [
+  AuthorizationMiddleware.isAuthenticated,
+  PenggunaMiddleware.isTukang,
+  TerimaValidator.validate()
+], PesananController.terima);
+
+router.get('/histori/:pengguna/:id_pengguna', [
+  AuthorizationMiddleware.isAuthenticated
+] , PesananController.histori);
 
 export default router;
