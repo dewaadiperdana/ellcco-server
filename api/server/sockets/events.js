@@ -4,6 +4,7 @@ const ON_ORDER_ACCEPTED = 'on_order_accepted';
 const ON_ROOM_MESSAGE = 'on_room_message';
 const ON_ROOM_MESSAGE_TYPING = 'on_room_message_typing';
 const ON_NEW_SOCKET_ID = 'on_new_socket_id';
+const ON_REUQEST_JOIN_ROOM = 'on_new_request_join_room';
 
 export {
   ON_NEW_FCM_TOKEN,
@@ -11,5 +12,6 @@ export {
   ON_ORDER_ACCEPTED,
   ON_ROOM_MESSAGE,
   ON_ROOM_MESSAGE_TYPING,
-  ON_NEW_SOCKET_ID
+  ON_NEW_SOCKET_ID,
+  ON_REUQEST_JOIN_ROOM
 };

@@ -4,6 +4,7 @@ import Response from '../utils/Response';
 import PesananService from '../services/PesananService';
 import NotifikasiService from '../services/NotifikasiService';
 import ValidationError from '../utils/ValidationError';
+import moment from 'moment';
 
 class PesananController {
   static async pesan(req, res) {
@@ -35,7 +36,7 @@ class PesananController {
   
       await admin.messaging().send(message);
   
-      res.send('Pesan layanan');
+      return Response.success(res, 200, 'Pesan Berhasil', true);
     } catch (error) {
       console.log(error);
       return Response.error(res, 500, 'Terjadi kesalahan', error);
@@ -56,9 +57,23 @@ class PesananController {
     try {
       const histori = await PesananService.getHistoriPengguna(req.params.pengguna, req.params.id_pengguna);
 
-      return Response.success(res, 200, 'Data Histori', histori);
+      return Response.success(res, 200, 'Data Histori', histori); 
     } catch (error) {
-      // 
+      throw error;
+    }
+  }
+
+  static async detail(req, res) {
+    try {
+      const detail = await PesananService.detailPesanan(
+        req.params.id_pesanan,
+        req.params.id_pelanggan,
+        ('id_tukang' in req.params ||req.params.id_tukang !== undefined ) ? req.params.id_tukang : null
+      );
+
+      return Response.success(res, 200, 'Detail Pesanan', detail);
+    } catch (error) {
+      throw error;
     }
   }
 }

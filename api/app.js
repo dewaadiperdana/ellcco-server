@@ -15,6 +15,7 @@ import firebaseAdminConfig from './server/config/firebase';
 import LayananRoutes from './server/routes/LayananRoutes';
 import PenggunaRoutes from './server/routes/PenggunaRoutes';
 import PesananRoutes from './server/routes/PesananRoutes';
+import NotifikasiRoutes from './server/routes/NotifikasiRoutes';
 
 dotenv.config();
 
@@ -44,6 +45,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/pengguna', PenggunaRoutes);
 app.use('/api/layanan', LayananRoutes);
 app.use('/api/pesanan', PesananRoutes);
+app.use('/api/notifikasi', NotifikasiRoutes);
 
 app.get('/', (req, res) => {
   res.send('Ellcco is on development');

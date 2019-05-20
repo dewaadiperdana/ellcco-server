@@ -20,4 +20,8 @@ router.get('/histori/:pengguna/:id_pengguna', [
   AuthorizationMiddleware.isAuthenticated
 ] , PesananController.histori);
 
+router.get('/detail/:id_pesanan/:id_pelanggan/:id_tukang?', [
+  AuthorizationMiddleware.isAuthenticated
+] , PesananController.detail);
+
 export default router;

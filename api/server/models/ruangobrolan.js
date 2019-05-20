@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
     },
     id_tukang: DataTypes.UUID,
     id_pelanggan: DataTypes.UUID,
@@ -28,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     RuangObrolan.belongsTo(models.Pengguna, {
-      foreignKey: 'id_pengguna',
+      foreignKey: 'id_pelanggan',
       onDelete: 'CASCADE'
     });
 

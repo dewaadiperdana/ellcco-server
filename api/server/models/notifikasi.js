@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     data: {
       type: DataTypes.TEXT,
       allowNull: true
-    }
+    },
+    tipe: DataTypes.STRING
   }, {
     freezeTableName: true,
     tableName: 'notifikasi',

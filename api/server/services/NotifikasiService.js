@@ -4,18 +4,61 @@ import Order from '../sockets/emitters/Order';
 import { admin } from '../../app';
 
 export default class NotifikasiService {
+  static async getNotifikasiPengguna(idPengguna) {
+    try {
+      const notifikasi = await db.Notifikasi.findAll({ where: { id_pengguna: idPengguna } });
+      const returnNotifikasi = notifikasi.length <= 0 ? null : notifikasi.map(item => item.dataValues);
+
+      return Promise.resolve(returnNotifikasi);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async tandaiSudahDibaca(data) {
+    try {
+      await db.Notifikasi.update(
+        {dibaca: data.dibaca},
+        {
+          where: { id: data.id }
+        }
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getNotifikasiBelumDibaca(idPengguna) {
+    try {
+      const notifikasi = await db.Notifikasi.findAll({
+        where: {
+          id_pengguna: idPengguna,
+          dibaca: false
+        }
+      });
+
+      const returnNotifikasi = notifikasi.length <= 0 ? null : notifikasi.map(item => item.dataValues);
+
+      return Promise.resolve(notifikasi);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   static async addNotifikasiPesananTukang(data, payload = null) {
     try {
       const tukang = await PenggunaService.getAllTukang();
       let notificationData = {
         judul: data.judul,
         deskripsi: data.deskripsi,
+        tipe: 'pesanan',
         data: payload === null ? payload : JSON.stringify(payload)
       };
 
       tukang.map(async item => {
         notificationData.id_pengguna = item.id;
-        await db.Notifikasi.create(notificationData);
+
+        NotifikasiService.addNotifikasi(notificationData, payload);
       });
 
       NotifikasiService.broadcastNotifikasiPesanan(notificationData);
@@ -32,6 +75,7 @@ export default class NotifikasiService {
         id_pengguna: data.id_pengguna,
         judul: data.judul,
         deskripsi: data.deskripsi,
+        tipe: data.tipe,
         data: data === null ? data : JSON.stringify(data)
       };
 
