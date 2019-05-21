@@ -18,12 +18,17 @@ class PesananController {
       }
 
       const pesanan = await PesananService.addPesanan(req.body);
-      const detail = await PesananService.detailPesanan(pesanan.dataValues.id, pesanan.dataValues.id_pelanggan);
+      const pelanggan = await PenggunaService.getPengguna(pesanan.dataValues.id_pelanggan);
+
+      delete pelanggan.password;
 
       await NotifikasiService.addNotifikasiPesananTukang({
         judul: 'Pesanan Baru',
         deskripsi: 'Pelanggan baru saja memesan layanan',
-      }, detail);
+      }, {
+        pesanan: pesanan.dataValues,
+        pelanggan: pelanggan.dataValues
+      });
 
       const message = {
         notification: {
@@ -31,7 +36,7 @@ class PesananController {
           body: 'Pelanggan baru saja memesan layanan'
         },
         data: {
-          pesanan: JSON.stringify(pesanan.dataValues)
+          pesanan: JSON.stringify(pesanan)
         },
         topic: 'pesanan'
       };
@@ -47,9 +52,9 @@ class PesananController {
 
   static async terima(req, res) {
     try {
-      const pesanan = await PesananService.terimaPesanan(req.body.id_pesanan, req.body.id_pengguna);
+      await PesananService.terimaPesanan(req.body.id_pesanan, req.body.id_pengguna);
 
-      return Response.success(res, 200, 'Berhasil', pesanan);
+      return Response.success(res, 200, 'Berhasil', { success: true });
     } catch (error) {
       return Response.error(res, 500, 'Gagal', error);
     }
@@ -74,16 +79,6 @@ class PesananController {
       );
 
       return Response.success(res, 200, 'Detail Pesanan', detail);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async getByKode(req, res) {
-    try {
-      const pesanan = await PesananService.getByKode(req.params.kode_pesanan);
-
-      return Response.success(res, 200, 'Berhasil', pesanan);
     } catch (error) {
       throw error;
     }

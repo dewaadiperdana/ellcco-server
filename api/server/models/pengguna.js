@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     no_telp: {
-      type: DataTypes.CHAR,
+      type: DataTypes.STRING,
       allowNull: false
     }
   }, {

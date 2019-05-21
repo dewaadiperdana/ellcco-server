@@ -49,7 +49,7 @@ module.exports = {
             allowNull: false
           },
           no_telp: {
-            type: Sequelize.CHAR,
+            type: Sequelize.STRING,
             allowNull: false
           },
           created_at: {
