@@ -52,7 +52,6 @@ export default class NotifikasiService {
         judul: data.judul,
         deskripsi: data.deskripsi,
         tipe: 'pesanan',
-        data: payload === null ? payload : JSON.stringify(payload)
       };
 
       tukang.map(async item => {
@@ -76,7 +75,7 @@ export default class NotifikasiService {
         judul: data.judul,
         deskripsi: data.deskripsi,
         tipe: data.tipe,
-        data: data === null ? data : JSON.stringify(data)
+        data: data === null ? JSON.stringify({}) : JSON.stringify(payload)
       };
 
       await db.Notifikasi.create(notificationData);

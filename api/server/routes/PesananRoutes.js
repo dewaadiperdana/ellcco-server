@@ -24,4 +24,8 @@ router.get('/detail/:id_pesanan/:id_pelanggan/:id_tukang?', [
   AuthorizationMiddleware.isAuthenticated
 ] , PesananController.detail);
 
+router.get('/get-by-kode/:kode_pesanan', [
+  AuthorizationMiddleware.isAuthenticated
+], PesananController.getByKode);
+
 export default router;

@@ -96,8 +96,11 @@ export default class PesananService {
       await NotifikasiService.notifikasiPenerimaanPesanan(pesanan.dataValues.id_pelanggan, pesanan);
       await RuangObrolanService.buatRuangObrolan({
         id_tukang: idPengguna,
-        id_pelanggan: pesanan.dataValues.id_pelanggan
+        id_pelanggan: pesanan.dataValues.id_pelanggan,
+        id_pesanan: pesanan.dataValues.id
       });
+
+      return Promise.resolve(pesanan);
     } catch (error) {
       throw error;
     }
@@ -126,6 +129,16 @@ export default class PesananService {
       return Promise.resolve(detail);
     } catch (error) {
       throw error;
+    }
+  }
+
+  static async getByKode(kode) {
+    try {
+      const pesanan = await db.Pesanan.findOne({ where: { kode_pesanan: kode } });
+
+      return Promise.resolve(pesanan.dataValues);
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 

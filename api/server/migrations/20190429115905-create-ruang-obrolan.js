@@ -28,6 +28,9 @@ module.exports = {
             },
             onDelete: 'cascade'
           },
+          id_pesanan: {
+            type: Sequelize.UUID
+          },
           kode_ruang: {
             type: Sequelize.STRING,
             unique: true

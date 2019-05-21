@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     id_tukang: DataTypes.UUID,
     id_pelanggan: DataTypes.UUID,
+    id_pesanan: DataTypes.UUID,
     kode_ruang: {
       type: DataTypes.STRING,
       unique: true
@@ -35,6 +36,11 @@ module.exports = (sequelize, DataTypes) => {
 
     RuangObrolan.hasMany(models.PesanObrolan, {
       foreignKey: 'id_ruang_obrolan',
+      onDelete: 'CASCADE'
+    });
+
+    RuangObrolan.belongsTo(models.Pesanan, {
+      foreignKey: 'id_pesanan',
       onDelete: 'CASCADE'
     });
   };

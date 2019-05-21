@@ -1,10 +1,10 @@
 import { admin } from '../../app';
 import { validationResult } from 'express-validator/check';
 import Response from '../utils/Response';
+import PenggunaService from '../services/PenggunaService';
 import PesananService from '../services/PesananService';
 import NotifikasiService from '../services/NotifikasiService';
 import ValidationError from '../utils/ValidationError';
-import moment from 'moment';
 
 class PesananController {
   static async pesan(req, res) {
@@ -18,10 +18,12 @@ class PesananController {
       }
 
       const pesanan = await PesananService.addPesanan(req.body);
+      const detail = await PesananService.detailPesanan(pesanan.dataValues.id, pesanan.dataValues.id_pelanggan);
+
       await NotifikasiService.addNotifikasiPesananTukang({
         judul: 'Pesanan Baru',
         deskripsi: 'Pelanggan baru saja memesan layanan',
-      }, pesanan.dataValues);
+      }, detail);
 
       const message = {
         notification: {
@@ -29,7 +31,7 @@ class PesananController {
           body: 'Pelanggan baru saja memesan layanan'
         },
         data: {
-          pesanan: JSON.stringify(pesanan)
+          pesanan: JSON.stringify(pesanan.dataValues)
         },
         topic: 'pesanan'
       };
@@ -45,9 +47,9 @@ class PesananController {
 
   static async terima(req, res) {
     try {
-      await PesananService.terimaPesanan(req.body.id_pesanan, req.body.id_pengguna);
+      const pesanan = await PesananService.terimaPesanan(req.body.id_pesanan, req.body.id_pengguna);
 
-      return Response.success(res, 200, 'Berhasil', { success: true });
+      return Response.success(res, 200, 'Berhasil', pesanan);
     } catch (error) {
       return Response.error(res, 500, 'Gagal', error);
     }
@@ -72,6 +74,16 @@ class PesananController {
       );
 
       return Response.success(res, 200, 'Detail Pesanan', detail);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getByKode(req, res) {
+    try {
+      const pesanan = await PesananService.getByKode(req.params.kode_pesanan);
+
+      return Response.success(res, 200, 'Berhasil', pesanan);
     } catch (error) {
       throw error;
     }
