@@ -1,5 +1,5 @@
 import { check } from 'express-validator/check';
-import database from '../../models';
+import db from '../../database/models';
 
 export default class RegisterValidator {
   static validate() {
@@ -12,7 +12,7 @@ export default class RegisterValidator {
         .not().isEmpty().withMessage('Email tidak boleh kosong')
         .isEmail().withMessage('Email tidak valid')
         .custom(async value => {
-          let pengguna = await database.Pengguna.findOne({ where: { email: value } });
+          let pengguna = await db.Pengguna.findOne({ where: { email: value } });
 
           if (pengguna) {
             return Promise.reject('Email sudah terdaftar');

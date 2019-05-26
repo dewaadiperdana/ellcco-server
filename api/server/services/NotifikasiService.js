@@ -1,7 +1,7 @@
-import db from '../models';
+import db from '../database/models';
 import PenggunaService from './PenggunaService';
 import Order from '../sockets/emitters/Order';
-import { admin } from '../../app';
+import { admin } from '../app';
 
 export default class NotifikasiService {
   static async getNotifikasiPengguna(idPengguna) {

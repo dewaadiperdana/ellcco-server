@@ -4,18 +4,17 @@ import bodyParser from 'body-parser';
 import hbs from 'express-handlebars';
 import http from 'http';
 import * as admin from 'firebase-admin';
-import path from 'path';
 import io from 'socket.io';
 
-import Socket from './server/sockets/Socket';
+import Socket from './sockets/Socket';
 
-import firebaseAdminConfig from './server/config/firebase';
+import firebaseAdminConfig from './config/firebase';
 
 // Application Routes
-import LayananRoutes from './server/routes/LayananRoutes';
-import PenggunaRoutes from './server/routes/PenggunaRoutes';
-import PesananRoutes from './server/routes/PesananRoutes';
-import NotifikasiRoutes from './server/routes/NotifikasiRoutes';
+import LayananRoutes from './routes/LayananRoutes';
+import PenggunaRoutes from './routes/PenggunaRoutes';
+import PesananRoutes from './routes/PesananRoutes';
+import NotifikasiRoutes from './routes/NotifikasiRoutes';
 
 dotenv.config();
 
@@ -30,9 +29,10 @@ const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);
 const socket = io(server);
 
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.engine('hbs', hbs( {
+app.engine('hbs', hbs({
   extname: 'hbs',
   defaultView: 'default',
   layoutsDir: __dirname + '/server/views/layouts/',

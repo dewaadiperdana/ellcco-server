@@ -19,7 +19,7 @@ module.exports = {
             },
             onDelete: 'cascade'
           },
-          id_pengguna: {
+          id_pelanggan: {
             type: Sequelize.UUID,
             references: {
               model: 'pengguna',

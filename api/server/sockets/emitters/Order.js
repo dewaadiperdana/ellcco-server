@@ -1,4 +1,4 @@
-import { socket } from '../../../app';
+import { socket } from '../../app';
 import { ON_NEW_ORDER, ON_ORDER_ACCEPTED } from '../events';
 
 export default class Order {

@@ -8,9 +8,9 @@
   "license": "MIT",
   "scripts": {
     "start": "NODE_ENV=production node ./build/app.js",
-    "dev": "NODE_ENV=development nodemon --exec babel-node ./api/app.js",
+    "dev": "NODE_ENV=development nodemon --exec babel-node ./src/app.js",
     "build": "rm -rf ./build && babel -d ./build ./api -s --copy-files",
-    "secretkey": "node ./scripts/generate-secret-key"
+    "secretkey": "node ./src/scripts/generate-secret-key"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.4",
@@ -23,6 +23,7 @@
     "express-validator": "^5.3.1",
     "firebase-admin": "^7.3.0",
     "handlebars": "^4.1.2",
+    "hbs": "^4.0.4",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "nodemailer": "^6.1.1",

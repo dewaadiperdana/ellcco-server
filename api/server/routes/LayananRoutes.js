@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import LayananController from '../controller/LayananController';
+import LayananController from '../controllers/LayananController';
 import {
   AddLayananValidator,
   UpdateLayananValidator,

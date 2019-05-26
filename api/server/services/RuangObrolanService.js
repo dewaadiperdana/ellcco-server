@@ -1,4 +1,4 @@
-import db from '../models';
+import db from '../../../src/database/models';
 import randomstring from 'randomstring';
 
 class RuangObrolanService {

@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import Sequelize from 'sequelize';
 
-import db from '../models';
+import db from '../database/models';
 import Mail from '../utils/Mail';
 import Hash from '../utils/Hash';
 import Helper from '../utils/Helper';

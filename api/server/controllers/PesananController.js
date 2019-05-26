@@ -1,4 +1,4 @@
-import { admin } from '../../app';
+import { admin } from '../app';
 import { validationResult } from 'express-validator/check';
 import Response from '../utils/Response';
 import PenggunaService from '../services/PenggunaService';

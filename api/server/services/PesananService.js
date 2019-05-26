@@ -1,5 +1,5 @@
 import randomstring from 'randomstring';
-import db from '../models';
+import db from '../database/models';
 
 import StatusPesananService from './StatusPesananService';
 import NotifikasiService from './NotifikasiService';

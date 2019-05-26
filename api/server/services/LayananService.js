@@ -1,13 +1,13 @@
-import database from '../models';
+import db from '../database/models';
 
 class LayananService {
   static async getAllLayanan(limit) {
     try {
       if(limit !== null) {
-        return await database.Layanan.findAll({ limit });
+        return await db.Layanan.findAll({ limit });
       }
 
-      return await database.Layanan.findAll();
+      return await db.Layanan.findAll();
     } catch(error) {
       throw error;                
     }
@@ -15,7 +15,7 @@ class LayananService {
 
   static async addLayanan(layanan) {
     try {
-      return await database.Layanan.create(layanan);
+      return await db.Layanan.create(layanan);
     } catch (error) {
       throw error;
     }
@@ -23,7 +23,7 @@ class LayananService {
 
   static async updateLayanan(idLayanan, dataLayanan) {
     try {
-      return await database.Layanan.update(dataLayanan, { where: { id: idLayanan } });
+      return await db.Layanan.update(dataLayanan, { where: { id: idLayanan } });
     } catch (error) {
       Promise.reject({ message: 'Gagal mengupdate layanan' });
       throw error;
@@ -32,7 +32,7 @@ class LayananService {
 
   static async deleteLayanan(idLayanan) {
     try {
-      return await database.Layanan.destroy({ where: { id: idLayanan } });
+      return await db.Layanan.destroy({ where: { id: idLayanan } });
     } catch (error) {
       Promise.reject({ message: 'Gagal menghapus layanan' });
       throw error;

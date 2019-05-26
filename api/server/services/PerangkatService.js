@@ -1,6 +1,6 @@
-import db from '../models';
+import db from '../database/models';
 import HakAksesService from './HakAksesService';
-import { admin, socket } from '../../app';
+import { admin, socket } from '../app';
 
 class PerangkatService {
   static async simpanToken(data) {

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import PesananController from '../controller/PesananController';
+import PesananController from '../controllers/PesananController';
 import { AuthorizationMiddleware, PenggunaMiddleware } from '../middlewares';
 import { PesanValidator, TerimaValidator } from '../validators/pesanan';
 
@@ -24,8 +24,8 @@ router.get('/detail/:id_pesanan/:id_pelanggan/:id_tukang?', [
   AuthorizationMiddleware.isAuthenticated
 ] , PesananController.detail);
 
-router.get('/get-by-kode/:kode_pesanan', [
-  AuthorizationMiddleware.isAuthenticated
-], PesananController.getByKode);
+// router.get('/get-by-kode/:kode_pesanan', [
+//   AuthorizationMiddleware.isAuthenticated
+// ], PesananController.getByKode);
 
 export default router;

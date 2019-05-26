@@ -20,8 +20,7 @@ export default class Mail {
     this.sendGrid = {
       service: 'gmail',
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS
+        api_key: process.env.SENDGRID_API_KEY
       }
     };
 

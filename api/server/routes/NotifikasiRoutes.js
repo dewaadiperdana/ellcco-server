@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import NotifikasiController from '../controller/NotifikasiController';
+import NotifikasiController from '../controllers/NotifikasiController';
 import { AuthorizationMiddleware } from '../middlewares';
 
 const router = Router();
