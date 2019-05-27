@@ -1,8 +1,9 @@
-import db from '../database/models';
-import randomstring from 'randomstring';
-import jwt from 'jsonwebtoken';
-import VerifikasiService from './verifikasi';
-import { Hash } from '../utils';
+import jwt from "jsonwebtoken";
+import { Hash } from "../utils";
+import db from "../database/models";
+import randomstring from "randomstring";
+import TukangService from './tukang';
+import VerifikasiService from "./verifikasi";
 
 const Pelanggan = db.Pelanggan;
 const Tukang = db.Tukang;
@@ -13,18 +14,18 @@ class AkunService {
     let response;
 
     try {
-      switch(hakAkses) {
-        case 'pelanggan':
+      switch (hakAkses) {
+        case "pelanggan":
           response = await AkunService.registerPelanggan(akun);
-          await VerifikasiService.createVerification('pelanggan', response);
+          await VerifikasiService.createVerification("pelanggan", response);
           return response;
-        case 'tukang':
+        case "tukang":
           response = await AkunService.registerTukang(akun);
-          await VerifikasiService.createVerification('tukang', response);
+          await VerifikasiService.createVerification("tukang", response);
           return response;
         default:
           response = await AkunService.registerPelanggan(akun);
-          await VerifikasiService.createVerification('pelanggan', response);
+          await VerifikasiService.createVerification("pelanggan", response);
           return response;
       }
     } catch (error) {
@@ -33,11 +34,11 @@ class AkunService {
   }
 
   static async verifikasi(hakAkses, token) {
-    switch(hakAkses) {
-      case 'pelanggan':
+    switch (hakAkses) {
+      case "pelanggan":
         await AkunService.verifikasiAkunPelanggan(token);
         break;
-      case 'tukang':
+      case "tukang":
         await AkunService.verifikasiAkunTukang(token);
         break;
       default:
@@ -50,10 +51,10 @@ class AkunService {
     let response;
 
     switch (hakAkses) {
-      case 'pelanggan':
+      case "pelanggan":
         response = await AkunService.processLogin(Pelanggan, akun);
         return response;
-      case 'tukang':
+      case "tukang":
         response = await AkunService.processLogin(Tukang, akun);
         return response;
       default:
@@ -67,8 +68,8 @@ class AkunService {
       const data = {
         ...pelanggan,
         password: await Hash.make(pelanggan.password),
-        kode: await AkunService.generateKodeAkun('pelanggan'),
-        hak_akses: 'pelanggan'
+        kode: await AkunService.generateKodeAkun("pelanggan"),
+        hak_akses: "pelanggan"
       };
 
       const response = await Pelanggan.create(data);
@@ -84,8 +85,8 @@ class AkunService {
       const data = {
         ...tukang,
         password: await Hash.make(tukang.password),
-        kode: await AkunService.generateKodeAkun('tukang'),
-        hak_akses: 'tukang'
+        kode: await AkunService.generateKodeAkun("tukang"),
+        hak_akses: "tukang"
       };
 
       const response = await Tukang.create(data);
@@ -99,7 +100,10 @@ class AkunService {
   static async verifikasiAkunPelanggan(token) {
     try {
       const verifikasi = await VerifikasiService.verifikasiAkun(token);
-      await Pelanggan.update({ aktif: true }, { where: {id: verifikasi.id_pelanggan} });
+      await Pelanggan.update(
+        { aktif: true },
+        { where: { id: verifikasi.id_pelanggan } }
+      );
 
       return Promise.resolve(true);
     } catch (error) {
@@ -110,7 +114,10 @@ class AkunService {
   static async verifikasiAkunTukang(token) {
     try {
       const verifikasi = await VerifikasiService.verifikasiAkun(token);
-      await Tukang.update({ aktif: true }, { where: {id: verifikasi.id_tukang} });
+      await Tukang.update(
+        { aktif: true },
+        { where: { id: verifikasi.id_tukang } }
+      );
 
       return Promise.resolve(true);
     } catch (error) {
@@ -125,8 +132,8 @@ class AkunService {
       if (akun === null) {
         return Promise.reject({
           modal: {
-            key: 'modal',
-            message: 'Akun tidak ditemukan'
+            key: "modal",
+            message: "Akun tidak ditemukan"
           }
         });
       }
@@ -135,17 +142,17 @@ class AkunService {
       if (!matchPassword) {
         return Promise.reject({
           modal: {
-            key: 'modal',
-            message: 'Password salah'
+            key: "modal",
+            message: "Password salah"
           }
         });
       }
 
-      if(!akun.aktif) {
+      if (!akun.aktif) {
         return Promise.reject({
           modal: {
-            key: 'modal',
-            message: 'Akun sedang tidak aktif'
+            key: "modal",
+            message: "Akun sedang tidak aktif"
           }
         });
       }
@@ -173,14 +180,13 @@ class AkunService {
     }
   }
 
-  static async storeDeviceTokenAndSocket(hakAkses, data) {
-    switch(hakAkses) {
-      case 'pelanggan':
+  static async storeDeviceToken(hakAkses, data) {
+    switch (hakAkses) {
+      case "pelanggan":
         await AkunService.storeDeviceData(Pelanggan, data);
         break;
-      case 'tukang':
-          await AkunService.storeDeviceData(Tukang, data);
-          await Tukang.subscribeToFCMTopicAndChannel();
+      case "tukang":
+        await AkunService.storeDeviceData(Tukang, data);
         break;
       default:
         await AkunService.storeDeviceData(Pelanggan, data);
@@ -190,12 +196,20 @@ class AkunService {
 
   static async storeDeviceData(model, data) {
     try {
+      const key = 'token' in data ? 'token' : 'socket';
       const perangkat = {
-        token: data.token,
-        socket: data.socket
+        [key]: data[key],
       };
 
-      await model.update(perangkat, { where: { id: data.id } });
+      const akun = model.findOne({ where: { id: data.idAkun } });
+
+      if (akun[key] === null || (akun[key] !== data[key])) {
+        await model.update(perangkat, { where: { id: data.idAkun } });
+
+        if (data.hakAkses === 'tukang') {
+          await TukangService.subscribeToFCMTopicAndChannel(data);
+        }
+      }
 
       return Promise.resolve(true);
     } catch (error) {
@@ -207,10 +221,10 @@ class AkunService {
     let model;
 
     switch (role) {
-      case 'pelanggan':
+      case "pelanggan":
         model = db.Pelanggan;
         break;
-      case 'tukang':
+      case "tukang":
         model = db.Tukang;
         break;
       default:
@@ -221,23 +235,39 @@ class AkunService {
     let akun = await model.findOne({ where: { email: email } });
 
     if (akun) {
-      return Promise.reject('Email sudah terdaftar');
+      return Promise.reject("Email sudah terdaftar");
+    }
+  }
+
+  static async checkIsAuthenticated(token) {
+    try {
+      const verified = jwt.verify(token, process.env.SECRET_KEY);
+
+      return Promise.resolve({
+        isAuthenticated: true,
+        hakAkses: verified.hak_akses
+      });
+    } catch (error) {
+      return Promise.resolve({
+        isAuthenticated: false,
+        hakAkses: null
+      });
     }
   }
 
   static generateKodeAkun(hakAkses) {
-    let kode = '';
+    let kode = "";
     let random = randomstring.generate(10);
 
-    switch(hakAkses) {
-      case 'pelanggan':
-        kode = 'PL-';
+    switch (hakAkses) {
+      case "pelanggan":
+        kode = "PL-";
         break;
-      case 'tukang':
-        kode = 'TK-';
+      case "tukang":
+        kode = "TK-";
         break;
       default:
-        kode = 'PL';
+        kode = "PL";
     }
 
     kode += random.toUpperCase();

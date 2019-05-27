@@ -1,14 +1,14 @@
-import randomstring from 'randomstring';
-import moment from 'moment';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import Sequelize from 'sequelize';
+import randomstring from "randomstring";
+import moment from "moment";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import Sequelize from "sequelize";
 
-import db from '../database/models';
-import Mail from '../utils/Mail';
-import Hash from '../utils/Hash';
-import Helper from '../utils/Helper';
-import HakAksesService from './HakAksesService';
+import db from "../database/models";
+import Mail from "../utils/Mail";
+import Hash from "../utils/Hash";
+import Helper from "../utils/Helper";
+import HakAksesService from "./HakAksesService";
 
 dotenv.config();
 
@@ -31,7 +31,7 @@ class PenggunaService {
       const pengguna = await db.Pengguna.findByPk(idPengguna);
 
       if (pengguna === null) {
-        return Promise.reject({ message: 'Pengguna tidak ditemukan' });
+        return Promise.reject({ message: "Pengguna tidak ditemukan" });
       }
 
       return Promise.resolve(pengguna.dataValues);
@@ -40,14 +40,14 @@ class PenggunaService {
     }
   }
 
-  static async getPesananPengguna(idPengguna) {
-    
-  }
+  static async getPesananPengguna(idPengguna) {}
 
   static async addVerifikasi(idPengguna) {
     try {
       let token = await this.generateTokenVerifikasi();
-      let tglBerlakuToken = moment().add(30, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+      let tglBerlakuToken = moment()
+        .add(30, "minutes")
+        .format("YYYY-MM-DD HH:mm:ss");
 
       return await db.VerifikasiAkun.create({
         id_pengguna: idPengguna,
@@ -69,8 +69,8 @@ class PenggunaService {
       if (pengguna === null) {
         return Promise.reject({
           modal: {
-            key: 'modal',
-            message: 'Akun tidak ditemukan'
+            key: "modal",
+            message: "Akun tidak ditemukan"
           }
         });
       } else {
@@ -79,17 +79,17 @@ class PenggunaService {
         if (!passwordMatch) {
           return Promise.reject({
             modal: {
-              key: 'modal',
-              message: 'Password salah'
+              key: "modal",
+              message: "Password salah"
             }
           });
         }
 
-        if(!pengguna.aktif) {
+        if (!pengguna.aktif) {
           return Promise.reject({
             modal: {
-              key: 'modal',
-              message: 'Akun sedang tidak aktif'
+              key: "modal",
+              message: "Akun sedang tidak aktif"
             }
           });
         }
@@ -102,7 +102,7 @@ class PenggunaService {
           nama: pengguna.nama,
           email: pengguna.email,
           aktif: pengguna.aktif,
-          tgl_registrasi: pengguna.tgl_registrasi,
+          tgl_registrasi: pengguna.tgl_registrasi
         };
 
         let token = jwt.sign(payload, process.env.SECRET_KEY);
@@ -120,11 +120,13 @@ class PenggunaService {
   static async verifikasiToken(token) {
     return new Promise(async (resolve, reject) => {
       try {
-        let verifikasi = await db.VerifikasiAkun.findOne({ where: { token: token } });
-  
+        let verifikasi = await db.VerifikasiAkun.findOne({
+          where: { token: token }
+        });
+
         if (verifikasi === null) {
           reject({
-            message: 'Token verifikasi tidak ditemukan'
+            message: "Token verifikasi tidak ditemukan"
           });
         } else {
           let expired = moment().isAfter(verifikasi.tanggal_berlaku);
@@ -133,7 +135,7 @@ class PenggunaService {
             await db.VerifikasiAkun.destroy({ where: { id: verifikasi.id } });
 
             reject({
-              message: 'Token verifikasi sudah kadaluarsa'
+              message: "Token verifikasi sudah kadaluarsa"
             });
           } else {
             await db.Pengguna.update(
@@ -158,17 +160,19 @@ class PenggunaService {
         let data = {
           ...pengguna,
           ...verifikasi,
-          tokenLink: `${Helper.appUrl()}api/pengguna/verifikasi/${verifikasi.token}`
+          tokenLink: `${Helper.appUrl()}api/pengguna/verifikasi/${
+            verifikasi.token
+          }`
         };
 
         let send = await mail.send(
-          'Admin Ellcco <hello@ellcco.herokuapp.com>',
+          "Admin Ellcco <hello@ellcco.herokuapp.com>",
           pengguna.email,
-          'Verifikasi Akun',
-          'verifikasi_akun',
+          "Verifikasi Akun",
+          "verifikasi_akun",
           data
         );
-        
+
         resolve(send);
       } catch (error) {
         reject(error);
@@ -193,21 +197,21 @@ class PenggunaService {
       let role = await db.HakAkses.findByPk(idRole);
 
       if (role === null) {
-        return Promise.reject({ message: 'Hak akses tidak dapat ditemukan' });
+        return Promise.reject({ message: "Hak akses tidak dapat ditemukan" });
       }
 
-      let kode = '';
+      let kode = "";
       let random = randomstring.generate(6);
 
-      switch(role.nama) {
-        case 'Admin':
-          kode = 'AD-';
+      switch (role.nama) {
+        case "Admin":
+          kode = "AD-";
           break;
-        case 'Tukang':
-          kode = 'TK-';
+        case "Tukang":
+          kode = "TK-";
           break;
-        case 'Pelanggan':
-          kode = 'PL-';
+        case "Pelanggan":
+          kode = "PL-";
           break;
         default:
           kode = 0;
@@ -226,7 +230,7 @@ class PenggunaService {
       let hakAkses = await db.HakAkses.findAll({
         where: {
           nama: {
-            [Op.notIn]: ['Admin']
+            [Op.notIn]: ["Admin"]
           }
         }
       });

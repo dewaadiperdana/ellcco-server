@@ -1,6 +1,6 @@
-import { validationResult } from 'express-validator/check';
-import { Error } from '../utils';
-import AkunService from '../services/akun';
+import { validationResult } from "express-validator/check";
+import { Error } from "../utils";
+import AkunService from "../services/akun";
 
 class PelangganController {
   static async register(req, res) {
@@ -8,12 +8,14 @@ class PelangganController {
 
     try {
       if (!errors.isEmpty()) {
-        return res.status(422).json(Error.formatFormValidationError(errors.array()));
+        return res
+          .status(422)
+          .json(Error.formatFormValidationError(errors.array()));
       }
 
-      await AkunService.register('pelanggan', req.body);
+      await AkunService.register("pelanggan", req.body);
 
-      return res.json('Registrasi berhasil');
+      return res.json("Registrasi berhasil");
     } catch (error) {
       throw error;
     }
@@ -21,9 +23,9 @@ class PelangganController {
 
   static async verifikasi(req, res) {
     try {
-      await AkunService.verifikasi('pelanggan', req.params.token);
+      await AkunService.verifikasi("pelanggan", req.params.token);
 
-      return res.send('Verifikasi berhasil');
+      return res.send("Verifikasi berhasil");
     } catch (error) {
       return res.json(error);
     }
@@ -33,11 +35,13 @@ class PelangganController {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(422).json(Error.formatFormValidationError(errors.array()));
+      return res
+        .status(422)
+        .json(Error.formatFormValidationError(errors.array()));
     }
 
     try {
-      const token = await AkunService.login('pelanggan', req.body);
+      const token = await AkunService.login("pelanggan", req.body);
 
       return res.json(token);
     } catch (error) {
@@ -46,7 +50,12 @@ class PelangganController {
   }
 
   static async checkIsAuthenticated(req, res) {
-    
+    const header = await req.get("Authorization");
+    const token = header.split(" ")[1];
+
+    const check = await AkunService.checkIsAuthenticated(token);
+
+    return res.status(200).json(check);
   }
 }
 

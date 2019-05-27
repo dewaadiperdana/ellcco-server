@@ -1,5 +1,6 @@
 import {
-  ON_USER_CONNECTED
+  ON_NEW_SOCKET_ID,
+  ON_NEW_FCM_TOKEN
 } from '../config/events';
 
 import AkunService from '../services/akun';
@@ -7,25 +8,28 @@ import AkunService from '../services/akun';
 class Socket {
   constructor(socket) {
     this.socket = socket;
+    console.log(`A user has connected`);
+
+    this.socket.on('disconnect', () => console.log('A user has disconnected'));
 
     this.listenOnNewFcmToken();
+    this.listenOnNewSocket();
   }
 
   async listenOnNewFcmToken() {
-    this.socket.on(ON_USER_CONNECTED, async payload => {
+    this.socket.on(ON_NEW_FCM_TOKEN, async payload => {
       const data = JSON.parse(payload);
-      
-      switch(data.hakAkses) {
-        case 'pelanggan':
-          await AkunService.storeDeviceTokenAndSocket('pelanggan', data);
-          break;
-        case 'tukang':
-          await AkunService.storeDeviceTokenAndSocket('tukang', data);
-          break;
-        default:
-          await AkunService.storeDeviceTokenAndSocket('pelanggan', data);
-          break;
-      }
+
+      await AkunService.storeDeviceToken(data.hakAkses, data);
+    });
+  }
+
+  async listenOnNewSocket() {
+    this.socket.on(ON_NEW_SOCKET_ID, async payload => {
+      const data = JSON.parse(payload);
+      console.log(data);
+
+      await AkunService.storeDeviceToken(data.hakAkses, data);
     });
   }
 }
