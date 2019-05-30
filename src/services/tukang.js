@@ -22,6 +22,20 @@ class TukangService {
       }
     });
   }
+
+  static async subscribeToSocketTopicAndChannel(socket, akun) {
+    const tukang = await Tukang.findOne({
+      where: { id: akun.idAkun },
+      include: [{
+        model: Jasa,
+        as: 'jasa'
+      }]
+    });
+
+    tukang.jasa.forEach(jasa => {
+      socket.join(jasa.channel);
+    });
+  }
 }
 
 export default TukangService;

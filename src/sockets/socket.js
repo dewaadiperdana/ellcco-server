@@ -4,6 +4,7 @@ import {
 } from '../config/events';
 
 import AkunService from '../services/akun';
+import TukangService from '../services/tukang';
 
 class Socket {
   constructor(socket) {
@@ -27,8 +28,8 @@ class Socket {
   async listenOnNewSocket() {
     this.socket.on(ON_NEW_SOCKET_ID, async payload => {
       const data = JSON.parse(payload);
-      console.log(data);
 
+      // await TukangService.subscribeToSocketTopicAndChannel(this.socket, data);
       await AkunService.storeDeviceToken(data.hakAkses, data);
     });
   }

@@ -157,17 +157,6 @@ class AkunService {
         });
       }
 
-      // if(akun.hak_akses === 'tukang') {
-      //   const jasa = await Jasa.findAll({
-      //     include: [{
-      //       model: db.Tukang,
-      //       as: 'tukang'
-      //     }]
-      //   });
-
-      //   return Promise.reject(jasa);
-      // }
-
       delete akun.dataValues.password;
       let token = jwt.sign(akun.dataValues, process.env.SECRET_KEY);
 

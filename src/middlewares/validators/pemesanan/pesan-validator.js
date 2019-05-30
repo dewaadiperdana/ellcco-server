@@ -6,7 +6,11 @@ class PesanValidator {
       check('id_pelanggan')
         .not().isEmpty().withMessage('Id pelanggan tidak boleh kosong'),
       check('id_jasa')
-        .not().isEmpty().withMessage('Id jasa tidak boleh kosong')
+        .not().isEmpty().withMessage('Id jasa tidak boleh kosong'),
+      check('kerusakan')
+        .not().isEmpty().withMessage('Kerusakan tidak boleh kosong'),
+      check('deskripsi')
+        .not().isEmpty().withMessage('Deskripsi kerusakan tidak boleh kosong')
     ];
   }
 }

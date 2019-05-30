@@ -51,17 +51,17 @@ module.exports = {
           biaya: {
             type: Sequelize.INTEGER
           },
+          kerusakan: Sequelize.STRING,
+          deskripsi: Sequelize.TEXT,
           status: {
-            type: Sequelize.ENUM({
-              values: [
-                'menunggu_penerimaan',
-                'menunggu_perbaikan',
-                'sedang_perbaikan',
-                'menunggu_pembayaran',
-                'perbaikan_selesai',
-                'perbaikan_dibatalkan'
-              ]
-            }),
+            type: Sequelize.ENUM(
+              'menunggu_penerimaan',
+              'menunggu_perbaikan',
+              'sedang_perbaikan',
+              'menunggu_pembayaran',
+              'perbaikan_selesai',
+              'perbaikan_dibatalkan'
+            ),
             defaultValue: 'menunggu_penerimaan'
           },
           created_at: {

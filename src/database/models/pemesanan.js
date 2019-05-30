@@ -13,16 +13,18 @@ module.exports = (sequelize, DataTypes) => {
     kode: DataTypes.STRING,
     tanggal: DataTypes.DATE,
     biaya: DataTypes.INTEGER,
+    kerusakan: DataTypes.STRING,
+    deskripsi: DataTypes.TEXT,
     status: {
-      type: DataTypes.ENUM,
-      values: [
+      type: DataTypes.ENUM(
         'menunggu_penerimaan',
         'menunggu_perbaikan',
         'sedang_perbaikan',
         'menunggu_pembayaran',
         'perbaikan_selesai',
         'perbaikan_dibatalkan'
-      ]
+      ),
+      defaultValue: 'menunggu_penerimaan'
     }
   }, {
     tableName: 'pemesanan',
@@ -32,17 +34,20 @@ module.exports = (sequelize, DataTypes) => {
   Pemesanan.associate = function(models) {
     Pemesanan.belongsTo(models.Pelanggan, {
       foreignKey: 'id_pelanggan',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
+      as: 'pelanggan'
     });
 
     Pemesanan.belongsTo(models.Tukang, {
       foreignKey: 'id_tukang',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
+      as: 'tukang'
     });
 
     Pemesanan.belongsTo(models.Jasa, {
       foreignKey: 'id_jasa',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
+      as: 'jasa'
     });
 
     Pemesanan.hasMany(models.DetailPerbaikan, {

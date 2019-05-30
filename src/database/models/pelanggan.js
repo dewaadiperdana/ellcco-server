@@ -37,12 +37,12 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Pelanggan.hasMany(models.PesanObrolan, {
-      foreignKey: 'id_akun',
+      foreignKey: 'id_pelanggan',
       onDelete: 'CASCADE'
     });
 
     Pelanggan.hasMany(models.Notifikasi, {
-      foreignKey: 'id_akun',
+      foreignKey: 'id_pelanggan',
       onDelete: 'CASCADE'
     });
   };
