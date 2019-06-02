@@ -1,6 +1,7 @@
 import db from '../database/models';
 import randomstring from 'randomstring';
 import NotifikasiService from './notifikasi';
+import RuangObrolanService from './ruangobrolan';
 
 const Jasa = db.Jasa;
 const Tukang = db.Tukang;
@@ -79,7 +80,7 @@ class PemesananService {
         }]
       });
 
-      if (pesanan.status !== 'menunggu_penerimaan' && pesanan.id_tukang === null) {
+      if (pesanan.status !== 'menunggu_penerimaan' && pesanan.id_tukang !== null) {
         return Promise.reject({
           modal: {
             key: 'modal',
@@ -98,7 +99,8 @@ class PemesananService {
         }
       );
 
-      NotifikasiService.sendOrderAcceptedNotification(pesanan, pesanan.pelanggan);
+      await NotifikasiService.sendOrderAcceptedNotification(pesanan);
+      await RuangObrolanService.create(pesanan);
 
       return Promise.resolve(true);
     } catch (error) {

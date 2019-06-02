@@ -28,7 +28,8 @@ module.exports = (sequelize, DataTypes) => {
   Pelanggan.associate = function(models) {
     Pelanggan.hasMany(models.Pemesanan, {
       foreignKey: 'id_pelanggan',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
+      as: 'pemesanan'
     });
 
     Pelanggan.hasOne(models.Verifikasi, {

@@ -36,11 +36,13 @@ class PemesananController {
 
       return res.json(true);
     } catch (error) {
+      console.log(error);
       return res.status(500).json(error);
     }
   }
 
   static async histori(req, res) {
+    console.log(req.params);
     try {
       const response = await PemesananService.histori(req.params.tipe, req.params.id);
 

@@ -57,7 +57,8 @@ module.exports = (sequelize, DataTypes) => {
 
     Pemesanan.hasMany(models.RuangObrolan, {
       foreignKey: 'id_pemesanan',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
+      as: 'ruangobrolan'
     });
   };
   return Pemesanan;

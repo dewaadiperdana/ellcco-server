@@ -7,8 +7,8 @@
   "author": "Adi Perdana <dewaadiperdana@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "NODE_ENV=production node ./build/app.js",
-    "dev": "NODE_ENV=development nodemon --exec babel-node ./src/app.js",
+    "start": "node ./build/app.js",
+    "dev": "nodemon --exec babel-node ./src/app.js",
     "build": "rm -rf ./build && babel -d ./build ./src -s --copy-files",
     "secretkey": "node ./src/scripts/generate-secret-key"
   },

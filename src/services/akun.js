@@ -7,7 +7,6 @@ import VerifikasiService from "./verifikasi";
 
 const Pelanggan = db.Pelanggan;
 const Tukang = db.Tukang;
-const Jasa = db.Jasa;
 
 class AkunService {
   static async register(hakAkses, akun) {
@@ -169,21 +168,48 @@ class AkunService {
     }
   }
 
-  static async storeDeviceToken(hakAkses, data) {
+  static async getAccount(role, id, include = null) {
+    let model;
+
+    try {
+      switch(role) {
+        case 'pelanggan':
+          model = Pelanggan;
+          break;
+        case 'tukang':
+          model = Tukang;
+          break;
+        default:
+          model = Pelanggan;
+          break;
+      }
+
+      const account = model.findOne({
+        where: { id: id },
+        include: include
+      });
+
+      return Promise.resolve(account);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async storeDeviceToken(hakAkses, data, socket) {
     switch (hakAkses) {
       case "pelanggan":
-        await AkunService.storeDeviceData(Pelanggan, data);
+        await AkunService.storeDeviceData(Pelanggan, data, socket);
         break;
       case "tukang":
-        await AkunService.storeDeviceData(Tukang, data);
+        await AkunService.storeDeviceData(Tukang, data, socket);
         break;
       default:
-        await AkunService.storeDeviceData(Pelanggan, data);
+        await AkunService.storeDeviceData(Pelanggan, data, socket);
         break;
     }
   }
 
-  static async storeDeviceData(model, data) {
+  static async storeDeviceData(model, data, socket) {
     try {
       const key = 'token' in data ? 'token' : 'socket';
       const perangkat = {
@@ -196,6 +222,7 @@ class AkunService {
         await model.update(perangkat, { where: { id: data.idAkun } });
 
         if (data.hakAkses === 'tukang') {
+          await TukangService.subscribeToSocketTopicAndChannel(socket, data);
           await TukangService.subscribeToFCMTopicAndChannel(data);
         }
       }
