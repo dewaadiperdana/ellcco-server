@@ -21,12 +21,14 @@ module.exports = (sequelize, DataTypes) => {
   PelayananJasa.associate = function(models) {
     PelayananJasa.belongsTo(models.Tukang, {
       foreignKey: "id_tukang",
-      onDelete: "CASCADE"
+      onDelete: "CASCADE",
+      as: 'tukang'
     });
 
     PelayananJasa.belongsTo(models.Jasa, {
       foreignKey: "id_jasa",
-      onDelete: "CASCADE"
+      onDelete: "CASCADE",
+      as: 'jasa'
     });
   };
   return PelayananJasa;

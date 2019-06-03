@@ -56,13 +56,13 @@ class PelayananService {
 
   static async store(data) {
     try {
-      await PelayananJasa.create(data);
+      const response = await PelayananJasa.create(data);
       await PelayananService.subscribeToFcmChannel(
         data.id_tukang,
         data.id_jasa
       );
 
-      return Promise.resolve(true);
+      return Promise.resolve(response);
     } catch (error) {
       throw error;
     }
@@ -114,7 +114,8 @@ class PelayananService {
     }
   }
 
-  static async subscribeToSocketChannel(data, socket) {
+  static async subscribeToSocketChannel(socket, data) {
+    console.log(data);
     try {
       const pelayanan = await PelayananService.getTukangAndJasa(
         data.id_tukang,
@@ -142,7 +143,15 @@ class PelayananService {
     }
   }
 
-  static async unsubscribeFromSocketChannel() {}
+  static async unsubscribeFromSocketChannel(socket, data) {
+    try {
+      const pelayanan = await PelayananService.getTukangAndJasa(data.id_tukang, data.id_jasa);
+
+      socket.leave(pelayanan.jasa.channel);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default PelayananService;

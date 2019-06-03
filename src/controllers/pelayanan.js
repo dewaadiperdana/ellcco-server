@@ -13,9 +13,9 @@ class PelayananController {
 
   static async store(req, res) {
     try {
-      await PelayananService.store(req.body);
+      const response = await PelayananService.store(req.body);
 
-      res.json(true);
+      res.json(response);
     } catch (error) {
       throw error;
     }
@@ -23,7 +23,7 @@ class PelayananController {
 
   static async delete(req, res) {
     try {
-      await PelayananService.delete(req.body.id);
+      await PelayananService.delete(req.params.id);
 
       res.json(true);
     } catch (error) {

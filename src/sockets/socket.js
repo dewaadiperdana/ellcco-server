@@ -1,7 +1,8 @@
 import {
   ON_NEW_SOCKET_ID,
   ON_NEW_FCM_TOKEN,
-  ON_JOIN_ORDER_CHANNEL
+  ON_JOIN_ORDER_CHANNEL,
+  ON_LEAVE_ORDER_CHANNEL
 } from "../config/events";
 
 import AkunService from "../services/akun";
@@ -45,13 +46,21 @@ class Socket {
 
   async listenOnJoinOrderChannel() {
     this.socket.on(ON_JOIN_ORDER_CHANNEL, async payload => {
+      console.log('A USER JOINING CHANNEL');
       const data = JSON.parse(payload);
 
       await PelayananService.subscribeToSocketChannel(this.socket, data);
     });
   }
 
-  async listenOnLeaveOrderChannel() {}
+  async listenOnLeaveOrderChannel() {
+    this.socket.on(ON_LEAVE_ORDER_CHANNEL, async payload => {
+      console.log('A USER LEAVING CHANNEL');
+      const data = JSON.parse(payload);
+
+      await PelayananService.unsubscribeFromSocketChannel(this.socket, data);
+    });
+  }
 }
 
 export default Socket;

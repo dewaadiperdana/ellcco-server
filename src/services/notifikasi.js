@@ -103,9 +103,9 @@ class NotifikasiService {
       await NotifikasiService.store(
         "pelanggan",
         {
-          judul: "Pesanan Telah Diterima",
+          judul: "Pesanan Diterima",
           deskripsi: "Pesanan anda telah diterima",
-          tipe: "pesanan"
+          tipe: "regular"
         },
         pelanggan.id,
         pesanan
@@ -121,7 +121,7 @@ class NotifikasiService {
       if (pelanggan.token !== null) {
         const message = {
           notification: {
-            title: "Pesanan Telah Diterima",
+            title: "Pesanan Diterima",
             body: "Pesanan anda telah diterima"
           },
           data: {
@@ -142,6 +142,48 @@ class NotifikasiService {
       await Notifikasi.update({ dibaca: true }, { where: { id: id } });
 
       return Promise.resolve(true);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async sendOrderBillNotification(pemesanan) {
+    const pelanggan = pemesanan.pelanggan;
+
+    try {
+      await NotifikasiService.store(
+        "pelanggan",
+        {
+          judul: "Biaya Perbaikan",
+          deskripsi: `Berikut biaya pemesanan dengan Kode Pesanan : ${
+            pemesanan.kode
+          }`,
+          tipe: "regular"
+        },
+        pelanggan.id,
+        pemesanan
+      );
+
+      if (pelanggan.socket !== null) {
+        PemesananEmitter.sendOrderBillNotification(pelanggan.socket, pemesanan);
+      }
+
+      if (pelanggan.token !== null) {
+        const message = {
+          notification: {
+            title: "Biaya Perbaikan",
+            body: `Berikut biaya pemesanan dengan Kode Pesanan : ${
+              pemesanan.kode
+            }`
+          },
+          data: {
+            pesanan: JSON.stringify(pemesanan)
+          },
+          token: pelanggan.token
+        };
+
+        await admin.messaging().send(message);
+      }
     } catch (error) {
       throw error;
     }

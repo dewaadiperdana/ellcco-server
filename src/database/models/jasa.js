@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
   Jasa.associate = function(models) {
     Jasa.hasMany(models.PelayananJasa, {
       foreignKey: 'id_jasa',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
+      as: 'pelayananjasa'
     });
 
     Jasa.hasMany(models.Pemesanan, {

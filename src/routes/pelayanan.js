@@ -5,6 +5,6 @@ const routes = express.Router();
 
 routes.get("/list/:id_tukang", PelayananController.list);
 routes.post("/add", PelayananController.store);
-routes.delete("/delete", PelayananController.delete);
+routes.delete("/delete/:id", PelayananController.delete);
 
 export default routes;

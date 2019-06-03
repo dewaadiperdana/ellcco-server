@@ -1,17 +1,18 @@
-import db from '../database/models';
-import randomstring from 'randomstring';
-import NotifikasiService from './notifikasi';
-import RuangObrolanService from './ruangobrolan';
+import db from "../database/models";
+import randomstring from "randomstring";
+import NotifikasiService from "./notifikasi";
+import RuangObrolanService from "./ruangobrolan";
 
 const Jasa = db.Jasa;
 const Tukang = db.Tukang;
 const Pemesanan = db.Pemesanan;
 const Pelanggan = db.Pelanggan;
+const DetailPerbaikan = db.DetailPerbaikan;
 
 class PemesananService {
   static async store(pesanan) {
     const kodePesanan = PemesananService.generateKodePesanan();
-    
+
     try {
       const data = {
         ...pesanan,
@@ -35,15 +36,15 @@ class PemesananService {
         include: [
           {
             model: Jasa,
-            as: 'jasa'
+            as: "jasa"
           },
           {
             model: Pelanggan,
-            as: 'pelanggan'
+            as: "pelanggan"
           },
           {
             model: Tukang,
-            as: 'tukang'
+            as: "tukang"
           }
         ]
       });
@@ -66,25 +67,51 @@ class PemesananService {
     }
   }
 
-  static async getHistory() {
+  static async addBiaya(id, biaya) {
+    try {
+      await Pemesanan.update(
+        { biaya: biaya, status: "menunggu_pembayaran" },
+        { where: { id: id } }
+      );
 
+      const pemesanan = await Pemesanan.findOne({
+        where: { id: id },
+        include: [
+          {
+            model: Pelanggan,
+            as: "pelanggan"
+          }
+        ]
+      });
+
+      await NotifikasiService.sendOrderBillNotification(pemesanan);
+
+      return Promise.resolve(pemesanan);
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async terima(idPesanan, idTukang) {
     try {
-      const pesanan = await Pemesanan.findOne({ 
+      const pesanan = await Pemesanan.findOne({
         where: { id: idPesanan },
-        include: [{
-          model: Pelanggan,
-          as: 'pelanggan'
-        }]
+        include: [
+          {
+            model: Pelanggan,
+            as: "pelanggan"
+          }
+        ]
       });
 
-      if (pesanan.status !== 'menunggu_penerimaan' && pesanan.id_tukang !== null) {
+      if (
+        pesanan.status !== "menunggu_penerimaan" &&
+        pesanan.id_tukang !== null
+      ) {
         return Promise.reject({
           modal: {
-            key: 'modal',
-            message: 'Pesanan sudah diterima'
+            key: "modal",
+            message: "Pesanan sudah diterima"
           }
         });
       }
@@ -92,7 +119,7 @@ class PemesananService {
       await Pemesanan.update(
         {
           id_tukang: idTukang,
-          status: 'menunggu_perbaikan'
+          status: "menunggu_perbaikan"
         },
         {
           where: { id: idPesanan }
@@ -109,8 +136,26 @@ class PemesananService {
     }
   }
 
+  static async detailPerbaikan(id) {
+    try {
+      const detail = await Pemesanan.findOne({
+        where: { id: id },
+        include: [
+          {
+            model: DetailPerbaikan,
+            as: "perbaikan"
+          }
+        ]
+      });
+
+      return Promise.resolve(detail.perbaikan);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static generateKodePesanan() {
-    let kode = 'PS-';
+    let kode = "PS-";
     let random = randomstring.generate(10).toUpperCase();
 
     kode += random;

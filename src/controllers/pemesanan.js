@@ -1,14 +1,16 @@
-import PemesananService from '../services/pemesanan';
-import { validationResult } from 'express-validator/check';
-import { Error } from '../utils';
-import db from '../database/models';
+import PemesananService from "../services/pemesanan";
+import { validationResult } from "express-validator/check";
+import { Error } from "../utils";
+import db from "../database/models";
 
 class PemesananController {
   static async pesan(req, res) {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(422).json(Error.formatFormValidationError(errors.array()));
+      return res
+        .status(422)
+        .json(Error.formatFormValidationError(errors.array()));
     }
 
     try {
@@ -42,11 +44,13 @@ class PemesananController {
   }
 
   static async histori(req, res) {
-    console.log(req.params);
     try {
-      const response = await PemesananService.histori(req.params.tipe, req.params.id);
+      const response = await PemesananService.histori(
+        req.params.tipe,
+        req.params.id
+      );
 
-      res.json(response);
+      return res.json(response);
     } catch (error) {
       throw error;
     }
@@ -60,7 +64,30 @@ class PemesananController {
       }
     );
 
-    res.json(response[0]);
+    return res.json(response[0]);
+  }
+
+  static async addBiaya(req, res) {
+    try {
+      const pemesanan = await PemesananService.addBiaya(
+        req.body.id_pemesanan,
+        req.body.biaya
+      );
+
+      return res.json(pemesanan);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getDetail(req, res) {
+    try {
+      const detail = await PemesananService.detailPerbaikan(req.params.id);
+
+      return res.json(detail);
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

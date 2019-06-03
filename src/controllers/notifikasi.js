@@ -47,7 +47,7 @@ class NotifikasiController {
 
   static async delete(req, res) {
     try {
-      const deleted = await NotifikasiService.delete(req.body.id);
+      const deleted = await NotifikasiService.delete(req.params.id);
 
       return res.json(deleted);
     } catch (error) {

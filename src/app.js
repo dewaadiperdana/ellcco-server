@@ -17,6 +17,7 @@ import tukangRoutes from "./routes/tukang";
 import assetsRoutes from "./routes/assets";
 import notifikasiRoutes from "./routes/notifikasi";
 import pelayananRoutes from "./routes/pelayanan";
+import detailPerbaikanRoutes from "./routes/detailperbaikan";
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.use("/api/v1/tukang", tukangRoutes);
 app.use("/api/v1/notifikasi", notifikasiRoutes);
 app.use("/api/v1/assets", assetsRoutes);
 app.use("/api/v1/pelayanan", pelayananRoutes);
+app.use("/api/v1/detailperbaikan", detailPerbaikanRoutes);
 
 server.listen(port, () => console.log(`Ellcco is running on port ${port}`));
 socketServer.on("connection", socket => {
