@@ -1,22 +1,26 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const DetailPerbaikan = sequelize.define('DetailPerbaikan', {
-    id: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
+  const DetailPerbaikan = sequelize.define(
+    "DetailPerbaikan",
+    {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: DataTypes.UUID
+      },
+      id_pesanan: DataTypes.UUID,
+      nama: DataTypes.STRING
     },
-    id_pesanan: DataTypes.UUID,
-    nama: DataTypes.STRING
-  }, {
-    freezeTableName: true,
-    tableName: 'detail_perbaikan',
-    underscored: true
-  });
+    {
+      freezeTableName: true,
+      tableName: "detail_perbaikan",
+      underscored: true
+    }
+  );
   DetailPerbaikan.associate = function(models) {
     DetailPerbaikan.belongsTo(models.Pesanan, {
-      foreignKey: 'id_pesanan',
-      onDelete: 'CASCADE'
+      foreignKey: "id_pesanan",
+      onDelete: "CASCADE"
     });
   };
   return DetailPerbaikan;

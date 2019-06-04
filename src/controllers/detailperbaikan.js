@@ -11,9 +11,21 @@ class DetailPerbaikanController {
     }
   }
 
+  static async delete(req, res) {
+    try {
+      const response = await DetailPerbaikanService.delete(req.params.id);
+
+      return res.json(response);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async list(req, res) {
     try {
-      const response = await DetailPerbaikanController.list(req.params.id_pemesanan);
+      const response = await DetailPerbaikanService.list(
+        req.params.id_pemesanan
+      );
 
       return res.json(response);
     } catch (error) {

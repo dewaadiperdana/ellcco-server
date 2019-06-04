@@ -48,6 +48,8 @@ app.use("/api/v1/assets", assetsRoutes);
 app.use("/api/v1/pelayanan", pelayananRoutes);
 app.use("/api/v1/detailperbaikan", detailPerbaikanRoutes);
 
+app.get("/", (req, res) => res.send("Ellcco is on development now."));
+
 server.listen(port, () => console.log(`Ellcco is running on port ${port}`));
 socketServer.on("connection", socket => {
   new Socket(socket);

@@ -5,7 +5,8 @@ import { PesanValidator } from "../middlewares/validators/pemesanan";
 const routes = express.Router();
 
 routes.post("/pesan", [PesanValidator.validate()], PemesananController.pesan);
-routes.get("/status", PemesananController.status);
+routes.put("/status", PemesananController.updateStatus);
+routes.get("/status/:id", PemesananController.status);
 routes.post("/terima", PemesananController.terima);
 routes.post("/biaya", PemesananController.addBiaya);
 routes.get("/perbaikan/detail/:id", PemesananController.getDetail);

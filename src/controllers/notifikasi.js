@@ -29,7 +29,9 @@ class NotifikasiController {
 
   static async markAsRead(req, res) {
     try {
-      await NotifikasiService.markAsRead(req.body.id);
+      const response = await NotifikasiService.markAsRead(req.body.id);
+
+      return res.json(response);
     } catch (error) {
       throw error;
     }

@@ -1,20 +1,18 @@
-import db from '../database/models';
-import randomstring from 'randomstring';
+import db from "../database/models";
+import randomstring from "randomstring";
 
 const Jasa = db.Jasa;
 
 class JasaService {
   static async get(limit = null) {
     try {
-      let jasa = {};
-
-      if (limit !== null) {
-        jasa = await Jasa.findAll({ limit });
-        return Promise.resolve(jasa.length <= 0 ? {} : jasa.map(item => item.dataValues));
+      if (!limit) {
+        const jasa = await Jasa.findAll({ limit: limit });
+        return Promise.resolve(jasa);
       }
 
-      jasa = await Jasa.findAll({});
-      return Promise.resolve(jasa.length <= 0 ? {} : jasa.map(item => item.dataValues));
+      const jasa = await Jasa.findAll({});
+      return Promise.resolve(jasa);
     } catch (error) {
       return Promise.resolve(error);
     }
@@ -22,7 +20,9 @@ class JasaService {
 
   static async store(jasa) {
     try {
-      const channel = `${jasa.nama.toLowerCase().replace(' ', '-')}_${JasaService.generateChannel()}`
+      const channel = `${jasa.nama
+        .toLowerCase()
+        .replace(" ", "-")}_${JasaService.generateChannel()}`;
       jasa.channel = channel;
 
       await Jasa.create(jasa);
@@ -35,7 +35,9 @@ class JasaService {
 
   static async update(id, jasa) {
     try {
-      const channel = `${jasa.nama.toLowerCase().replace(' ', '-')}_${JasaService.generateChannel()}`
+      const channel = `${jasa.nama
+        .toLowerCase()
+        .replace(" ", "-")}_${JasaService.generateChannel()}`;
       jasa.channel = channel;
 
       await Jasa.update(jasa, { where: { id: id } });

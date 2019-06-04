@@ -126,8 +126,8 @@ class PemesananService {
         }
       );
 
-      await NotifikasiService.sendOrderAcceptedNotification(pesanan);
       await RuangObrolanService.create(pesanan);
+      await NotifikasiService.sendOrderAcceptedNotification(pesanan);
 
       return Promise.resolve(true);
     } catch (error) {
@@ -149,6 +149,48 @@ class PemesananService {
       });
 
       return Promise.resolve(detail.perbaikan);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getSelectedStatus(id) {
+    try {
+      const statuses = await db.sequelize.query(
+        "SELECT * FROM enum_range('menunggu_penerimaan'::enum_pemesanan_status, NULL) AS status;",
+        {
+          type: db.sequelize.QueryTypes.SELECT
+        }
+      );
+
+      const pemesanan = await Pemesanan.findOne({ where: { id: id } });
+
+      const selected = statuses[0].status.map(item => {
+        return item === pemesanan.status
+          ? {
+              status: item,
+              selected: true
+            }
+          : {
+              status: item,
+              selected: false
+            };
+      });
+
+      return Promise.resolve(selected);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async updateStatus(data) {
+    try {
+      const updated = await Pemesanan.update(
+        { status: data.status },
+        { where: { id: data.id } }
+      );
+
+      return Promise.resolve(updated);
     } catch (error) {
       throw error;
     }

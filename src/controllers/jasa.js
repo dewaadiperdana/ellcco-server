@@ -1,16 +1,15 @@
-import JasaService from '../services/jasa';
-import { validationResult } from 'express-validator/check';
-import { Error } from '../utils';
+import JasaService from "../services/jasa";
+import { validationResult } from "express-validator/check";
+import { Error } from "../utils";
 
 class JasaController {
   static async index(req, res) {
-    const limit = 'limit' in req.params ? req.params.limit : null;
+    const limit = "limit" in req.params ? req.params.limit : null;
 
     try {
       const jasa = await JasaService.get(limit);
       res.json(jasa);
     } catch (error) {
-      console.log(error);
       res.json(error);
     }
   }

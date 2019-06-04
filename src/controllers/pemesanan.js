@@ -38,7 +38,6 @@ class PemesananController {
 
       return res.json(true);
     } catch (error) {
-      console.log(error);
       return res.status(500).json(error);
     }
   }
@@ -57,14 +56,9 @@ class PemesananController {
   }
 
   static async status(req, res) {
-    const response = await db.sequelize.query(
-      "SELECT * FROM enum_range('menunggu_penerimaan'::enum_pemesanan_status, NULL) AS status;",
-      {
-        type: db.sequelize.QueryTypes.SELECT
-      }
-    );
+    const response = await PemesananService.getSelectedStatus(req.params.id);
 
-    return res.json(response[0]);
+    return res.json(response);
   }
 
   static async addBiaya(req, res) {
@@ -75,6 +69,16 @@ class PemesananController {
       );
 
       return res.json(pemesanan);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async updateStatus(req, res) {
+    try {
+      const response = await PemesananService.updateStatus(req.body);
+
+      return res.json(response);
     } catch (error) {
       throw error;
     }
