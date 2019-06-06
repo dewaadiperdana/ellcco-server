@@ -1,18 +1,27 @@
 import db from "../database/models";
 import JasaService from "./jasa";
 import PelayananService from "./pelayanan";
+import PemesananService from "./pemesanan";
 import PemesananEmitter from "../sockets/emitters/pemesanan";
 
 import { admin } from "../app";
 
 const Notifikasi = db.Notifikasi;
+const Pelanggan = db.Pelanggan;
+const Tukang = db.Tukang;
+const PesanObrolan = db.PesanObrolan;
+const RuangObrolan = db.RuangObrolan;
+const Pemesanan = db.Pemesanan;
 
 class NotifikasiService {
   static async get(hakAkses, idAkun) {
     try {
       const id = `id_${hakAkses}`;
 
-      const notifikasi = Notifikasi.findAll({ where: { [id]: idAkun } });
+      const notifikasi = await Notifikasi.findAll({
+        where: { [id]: idAkun },
+        order: [["tanggal", "DESC"]]
+      });
 
       return Promise.resolve(notifikasi);
     } catch (error) {
@@ -194,6 +203,39 @@ class NotifikasiService {
       await Notifikasi.destroy({ where: { id: id } });
 
       return Promise.resolve(true);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async saveChatMessageNotification(role, pesanObrolan) {
+    const key = role === "pelanggan" ? "tukang" : "pelanggan";
+
+    try {
+      const pesanObrolanResponse = await PesanObrolan.findOne({
+        where: { id: pesanObrolan.id },
+        include: [RuangObrolan]
+      });
+
+      const ruangObrolan = await RuangObrolan.findOne({
+        where: { id: pesanObrolanResponse.RuangObrolan.id },
+        include: [Pemesanan]
+      });
+
+      const detailPemesanan = await PemesananService.detail(
+        ruangObrolan.Pemesanan.id
+      );
+
+      await NotifikasiService.store(
+        key,
+        {
+          judul: detailPemesanan[role].nama,
+          deskripsi: pesanObrolan.isi,
+          tipe: "regular"
+        },
+        ruangObrolan.Pemesanan[`id_${key}`],
+        pesanObrolan
+      );
     } catch (error) {
       throw error;
     }

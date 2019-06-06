@@ -9,6 +9,8 @@ const ON_USER_CONNECTED = "on_new_user_connected";
 const ON_JOIN_ORDER_CHANNEL = "on_join_order_channel";
 const ON_LEAVE_ORDER_CHANNEL = "on_leave_order_channel";
 const ON_ORDER_BILL_ADDED = "on_order_bill_added";
+const ON_JOIN_CHAT_ROOM = "on_join_chat_room";
+const ON_CHAT_MESSAGE = "on_chat_message";
 
 export {
   ON_NEW_FCM_TOKEN,
@@ -21,5 +23,7 @@ export {
   ON_USER_CONNECTED,
   ON_JOIN_ORDER_CHANNEL,
   ON_LEAVE_ORDER_CHANNEL,
-  ON_ORDER_BILL_ADDED
+  ON_ORDER_BILL_ADDED,
+  ON_JOIN_CHAT_ROOM,
+  ON_CHAT_MESSAGE
 };

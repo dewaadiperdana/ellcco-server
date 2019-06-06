@@ -58,7 +58,8 @@ class PemesananService {
   static async histori(tipe, id) {
     try {
       const histori = await Pemesanan.findAll({
-        where: { [`id_${tipe}`]: id }
+        where: { [`id_${tipe}`]: id },
+        order: [["tanggal", "DESC"]]
       });
 
       return Promise.resolve(histori);

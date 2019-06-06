@@ -2,12 +2,18 @@ import {
   ON_NEW_SOCKET_ID,
   ON_NEW_FCM_TOKEN,
   ON_JOIN_ORDER_CHANNEL,
-  ON_LEAVE_ORDER_CHANNEL
+  ON_LEAVE_ORDER_CHANNEL,
+  ON_JOIN_CHAT_ROOM,
+  ON_CHAT_MESSAGE
 } from "../config/events";
+
+import { admin } from "../app";
 
 import AkunService from "../services/akun";
 import RuangObrolanService from "../services/ruangobrolan";
 import PelayananService from "../services/pelayanan";
+import PesanObrolanService from "../services/pesanobrolan";
+import NotifikasiService from "../services/notifikasi";
 
 class Socket {
   constructor(socket) {
@@ -20,6 +26,8 @@ class Socket {
     this.listenOnNewSocket();
     this.listenOnJoinOrderChannel();
     this.listenOnLeaveOrderChannel();
+    this.listenOnJoinChatRoom();
+    this.listenOnChatMessage();
   }
 
   async listenOnNewFcmToken() {
@@ -37,16 +45,16 @@ class Socket {
 
       await AkunService.storeDeviceToken(data.hakAkses, data, this.socket);
       await RuangObrolanService.subscribeToRuangObrolanSocket(
+        this.socket,
         data.hakAkses,
-        data,
-        this.socket
+        data
       );
     });
   }
 
   async listenOnJoinOrderChannel() {
     this.socket.on(ON_JOIN_ORDER_CHANNEL, async payload => {
-      console.log('A USER JOINING CHANNEL');
+      console.log("A USER JOINING CHANNEL");
       const data = JSON.parse(payload);
 
       await PelayananService.subscribeToSocketChannel(this.socket, data);
@@ -55,10 +63,47 @@ class Socket {
 
   async listenOnLeaveOrderChannel() {
     this.socket.on(ON_LEAVE_ORDER_CHANNEL, async payload => {
-      console.log('A USER LEAVING CHANNEL');
+      console.log("A USER LEAVING CHANNEL");
       const data = JSON.parse(payload);
 
       await PelayananService.unsubscribeFromSocketChannel(this.socket, data);
+    });
+  }
+
+  async listenOnJoinChatRoom() {
+    this.socket.on(ON_JOIN_CHAT_ROOM, async payload => {
+      console.log("A USER JOIN ROOM");
+
+      this.socket.join(payload.room);
+    });
+  }
+
+  async listenOnChatMessage() {
+    this.socket.on(ON_CHAT_MESSAGE, async payload => {
+      const data = JSON.parse(payload);
+
+      const pesanObrolan = await PesanObrolanService.store(data.message);
+      const notifikasi = await NotifikasiService.saveChatMessageNotification(
+        data.role,
+        pesanObrolan
+      );
+
+      this.socket.broadcast
+        .to(data.ruang_obrolan)
+        .emit(ON_CHAT_MESSAGE, pesanObrolan);
+
+      const message = {
+        notification: {
+          title: data.title,
+          body: pesanObrolan.isi
+        },
+        data: {
+          pesanan: JSON.stringify(pesanObrolan)
+        },
+        topic: data.ruang_obrolan
+      };
+
+      await admin.messaging().send(message);
     });
   }
 }

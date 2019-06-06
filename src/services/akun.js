@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { Hash } from "../utils";
 import db from "../database/models";
 import randomstring from "randomstring";
-import TukangService from './tukang';
+import TukangService from "./tukang";
 import VerifikasiService from "./verifikasi";
 
 const Pelanggan = db.Pelanggan;
@@ -172,11 +172,11 @@ class AkunService {
     let model;
 
     try {
-      switch(role) {
-        case 'pelanggan':
+      switch (role) {
+        case "pelanggan":
           model = Pelanggan;
           break;
-        case 'tukang':
+        case "tukang":
           model = Tukang;
           break;
         default:
@@ -188,6 +188,8 @@ class AkunService {
         where: { id: id },
         include: include
       });
+
+      delete account.password;
 
       return Promise.resolve(account);
     } catch (error) {
@@ -211,17 +213,17 @@ class AkunService {
 
   static async storeDeviceData(model, data, socket) {
     try {
-      const key = 'token' in data ? 'token' : 'socket';
+      const key = "token" in data ? "token" : "socket";
       const perangkat = {
-        [key]: data[key],
+        [key]: data[key]
       };
 
       const akun = model.findOne({ where: { id: data.idAkun } });
 
-      if (akun[key] === null || (akun[key] !== data[key])) {
+      if (akun[key] === null || akun[key] !== data[key]) {
         await model.update(perangkat, { where: { id: data.idAkun } });
 
-        if (data.hakAkses === 'tukang') {
+        if (data.hakAkses === "tukang") {
           await TukangService.subscribeToSocketTopicAndChannel(socket, data);
           await TukangService.subscribeToFCMTopicAndChannel(data);
         }
