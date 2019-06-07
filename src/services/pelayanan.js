@@ -106,23 +106,26 @@ class PelayananService {
         idJasa
       );
 
-      await admin
-        .messaging()
-        .subscribeToTopic(pelayanan.tukang.token, pelayanan.jasa.channel);
+      if (pelayanan.tukang.token !== null) {
+        await admin
+          .messaging()
+          .subscribeToTopic(pelayanan.tukang.token, pelayanan.jasa.channel);
+      }
     } catch (error) {
       throw error;
     }
   }
 
   static async subscribeToSocketChannel(socket, data) {
-    console.log(data);
     try {
       const pelayanan = await PelayananService.getTukangAndJasa(
         data.id_tukang,
         data.id_jasa
       );
 
-      socket.join(pelayanan.jasa.channel);
+      if (pelayanan.tukang.socket !== null) {
+        socket.join(pelayanan.jasa.channel);
+      }
     } catch (error) {
       throw error;
     }
@@ -145,7 +148,10 @@ class PelayananService {
 
   static async unsubscribeFromSocketChannel(socket, data) {
     try {
-      const pelayanan = await PelayananService.getTukangAndJasa(data.id_tukang, data.id_jasa);
+      const pelayanan = await PelayananService.getTukangAndJasa(
+        data.id_tukang,
+        data.id_jasa
+      );
 
       socket.leave(pelayanan.jasa.channel);
     } catch (error) {

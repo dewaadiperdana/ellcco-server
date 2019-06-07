@@ -33,7 +33,7 @@ module.exports = {
             defaultValue: null
           },
           judul: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING(100)
           },
           deskripsi: {
             type: Sequelize.TEXT
@@ -48,7 +48,7 @@ module.exports = {
             defaultValue: false
           },
           tipe: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING(15)
           },
           data: {
             type: Sequelize.TEXT

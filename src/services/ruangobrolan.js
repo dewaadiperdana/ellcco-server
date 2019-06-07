@@ -15,8 +15,7 @@ class RuangObrolanService {
     try {
       const ruangObrolan = {
         id_pemesanan: pesanan.id,
-        kode: code,
-        dibuka: true
+        kode: code
       };
 
       await RuangObrolan.create(ruangObrolan);
