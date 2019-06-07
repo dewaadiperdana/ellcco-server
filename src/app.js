@@ -6,6 +6,7 @@ import io from "socket.io";
 import http from "http";
 import exphbs from "express-handlebars";
 import path from "path";
+import cors from "cors";
 
 import Socket from "./sockets/socket";
 import firebaseAdminConfig from "./config/firebase";
@@ -31,6 +32,8 @@ admin.initializeApp({
   credential: admin.credential.cert(firebaseAdminConfig),
   databaseURL: process.env.FIREBASE_DB_URL
 });
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
