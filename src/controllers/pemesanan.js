@@ -62,6 +62,14 @@ class PemesananController {
   }
 
   static async addBiaya(req, res) {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res
+        .status(422)
+        .json(Error.formatFormValidationError(errors.array()));
+    }
+
     try {
       const pemesanan = await PemesananService.addBiaya(
         req.body.id_pemesanan,

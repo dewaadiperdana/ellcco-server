@@ -57,6 +57,28 @@ class PelangganController {
 
     return res.status(200).json(check);
   }
+
+  static async editProfile(req, res) {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res
+        .status(422)
+        .json(Error.formatFormValidationError(errors.array()));
+    }
+
+    try {
+      const response = await AkunService.editProfile(
+        "pelanggan",
+        req.params.id,
+        req.body
+      );
+
+      return res.json(response);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default PelangganController;

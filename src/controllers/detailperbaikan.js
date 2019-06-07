@@ -1,7 +1,17 @@
+import { validationResult } from "express-validator/check";
+import { Error } from "../utils";
 import DetailPerbaikanService from "../services/detailperbaikan";
 
 class DetailPerbaikanController {
   static async store(req, res) {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res
+        .status(422)
+        .json(Error.formatFormValidationError(errors.array()));
+    }
+
     try {
       const detail = await DetailPerbaikanService.store(req.body);
 

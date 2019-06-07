@@ -49,6 +49,20 @@ class TukangController {
     }
   }
 
+  static async editProfile(req, res) {
+    try {
+      const response = await AkunService.editProfile(
+        "tukang",
+        req.params.id,
+        req.body
+      );
+
+      return res.json(response);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
   static async checkIsAuthenticated(req, res) {
     const header = await req.get("Authorization");
     const token = header.split(" ")[1];

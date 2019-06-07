@@ -235,6 +235,30 @@ class AkunService {
     }
   }
 
+  static async getAccountByEmail(role, email) {
+    let model;
+
+    switch (role) {
+      case "pelanggan":
+        model = Pelanggan;
+        break;
+      case "tukang":
+        model = Tukang;
+        break;
+      default:
+        model = Pelanggan;
+        break;
+    }
+
+    try {
+      const akun = await model.findOne({ where: { email: email } });
+
+      return Promise.resolve(akun);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async isEmailAlreadyRegistered(role, email) {
     let model;
 
@@ -270,6 +294,49 @@ class AkunService {
         isAuthenticated: false,
         hakAkses: null
       });
+    }
+  }
+
+  static async editProfile(role, id, data) {
+    let model;
+
+    switch (role) {
+      case "pelanggan":
+        model = Pelanggan;
+        break;
+      case "tukang":
+        model = Tukang;
+        break;
+      default:
+        model = Pelanggan;
+        break;
+    }
+
+    try {
+      const check = await model.findOne({ where: { id: id } });
+
+      if (!check) {
+        return Promise.reject({
+          modal: {
+            key: "modal",
+            message: "Akun tidak ditemukan"
+          }
+        });
+      }
+
+      await model.update(data, { where: { id: id } });
+      const profile = await model.findOne({ where: { id: id } });
+
+      delete profile.password;
+
+      const token = jwt.sign(profile.dataValues, process.env.SECRET_KEY);
+
+      return Promise.resolve({
+        akun: profile,
+        token: token
+      });
+    } catch (error) {
+      throw error;
     }
   }
 
