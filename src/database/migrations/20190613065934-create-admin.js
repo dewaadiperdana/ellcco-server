@@ -21,7 +21,7 @@ module.exports = {
             type: Sequelize.STRING(200)
           },
           hak_akses: {
-            type: Sequelize.STIRNG(10)
+            type: Sequelize.STRING(10)
           },
           created_at: {
             allowNull: false,
