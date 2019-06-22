@@ -14,7 +14,7 @@
     "dev": "nodemon --exec babel-node ./src/app.js",
     "build": "rm -rf ./build && babel -d ./build ./src -s --copy-files",
     "secretkey": "node ./src/scripts/generate-secret-key",
-    "heroku-postbuild": "cd src/client && npm install && npm run build"
+    "heroku-postbuild": "npm run build && cd src/client && npm install && npm run build"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.4",
