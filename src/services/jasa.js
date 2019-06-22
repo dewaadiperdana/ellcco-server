@@ -1,13 +1,14 @@
-import db from "../database/models";
-import randomstring from "randomstring";
+import db from '../database/models';
+import randomstring from 'randomstring';
 
 const Jasa = db.Jasa;
+const sequelize = db.sequelize;
 
 class JasaService {
   static async get(limit = null) {
     try {
       if (!limit) {
-        const jasa = await Jasa.findAll({ limit: limit });
+        const jasa = await Jasa.findAll({ limit });
         return Promise.resolve(jasa);
       }
 
@@ -63,6 +64,18 @@ class JasaService {
       const jasa = await Jasa.findOne({ where: { id: id } });
 
       return Promise.resolve(jasa.dataValues);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async count() {
+    try {
+      const count = await Jasa.findAll({
+        attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'count']]
+      });
+
+      return Promise.resolve(count);
     } catch (error) {
       throw error;
     }

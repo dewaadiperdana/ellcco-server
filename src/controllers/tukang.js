@@ -71,6 +71,36 @@ class TukangController {
 
     return res.status(200).json(check);
   }
+
+    static async accountList(req, res) {
+    try {
+      const accounts = await AkunService.accountList('tukang');
+
+      return res.json(accounts);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async accountStatus(req, res) {
+    try {
+      const response = await AkunService.activateOrDeactivateAccount(req.body.type, 'tukang', req.body.id);
+
+      return res.json(response);
+    } catch (error) {
+      return res.status(400).json(error);
+    }
+  }
+
+  static async counts(req, res) {
+    try {
+      const response = await AkunService.counts('tukang');
+
+      res.json(response[0]);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default TukangController;

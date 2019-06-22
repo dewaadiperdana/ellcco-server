@@ -1,13 +1,16 @@
-import db from "../database/models";
-import randomstring from "randomstring";
-import NotifikasiService from "./notifikasi";
-import RuangObrolanService from "./ruangobrolan";
+import db from '../database/models';
+import randomstring from 'randomstring';
+import NotifikasiService from './notifikasi';
+import RuangObrolanService from './ruangobrolan';
+import moment from 'moment';
+import Sequelize from 'sequelize';
 
 const Jasa = db.Jasa;
 const Tukang = db.Tukang;
 const Pemesanan = db.Pemesanan;
 const Pelanggan = db.Pelanggan;
 const DetailPerbaikan = db.DetailPerbaikan;
+const Op = Sequelize.Op;
 
 class PemesananService {
   static async store(pesanan) {
@@ -169,13 +172,13 @@ class PemesananService {
       const selected = statuses[0].status.map(item => {
         return item === pemesanan.status
           ? {
-              status: item,
-              selected: true
+            status: item,
+            selected: true
             }
           : {
               status: item,
               selected: false
-            };
+          };
       });
 
       return Promise.resolve(selected);
@@ -197,9 +200,67 @@ class PemesananService {
     }
   }
 
+  static async filter(time) {
+    const timeSplit = time.split('_');
+    const timeNumber = timeSplit[1];
+    const timeLabel = timeSplit[2];
+
+    try {
+      let pemesanan;
+
+      if (time === 'all') {
+        pemesanan = await Pemesanan.findAll({
+          include: [
+            {
+              model: Jasa,
+              as: 'jasa'
+            },
+            {
+              model: Pelanggan,
+              as: 'pelanggan'
+            },
+            {
+              model: Tukang,
+              as: 'tukang'
+            }
+          ]
+        });
+
+        return Promise.resolve(pemesanan);
+      }
+
+      const timeThen = moment().subtract(timeNumber, timeLabel).format('YYYY-MM-DD');
+      const timeNow = moment().format('YYYY-MM-DD');
+
+      pemesanan = await Pemesanan.findAll({
+        where: {
+          tanggal: { [Op.between]: [timeThen, timeNow] }
+        },
+        include: [
+          {
+            model: Jasa,
+            as: "jasa"
+          },
+          {
+            model: Pelanggan,
+            as: "pelanggan"
+          },
+          {
+            model: Tukang,
+            as: "tukang"
+          }
+        ]
+      });
+
+      return Promise.resolve(pemesanan);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static generateKodePesanan() {
     let kode = "PS-";
-    let random = randomstring.generate(10).toUpperCase();
+    let random = randomstring.generate(5).toUpperCase();
 
     kode += random;
     return kode;

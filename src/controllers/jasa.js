@@ -18,7 +18,7 @@ class JasaController {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.json(Error.formatFormValidationError(errors.array()));
+      return res.status(422).json(Error.formatFormValidationError(errors.array()));
     }
 
     try {
@@ -53,6 +53,26 @@ class JasaController {
       return res.status(200).json(true);
     } catch (error) {
       return res.status(500).json(error);
+    }
+  }
+
+  static async single(req, res) {
+    try {
+      const jasa = await JasaService.byId(req.params.id);
+
+      return res.json(jasa);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async count(req, res) {
+    try {
+      const response = await JasaService.count();
+
+      return res.json(response[0]);
+    } catch (error) {
+      throw error;
     }
   }
 }

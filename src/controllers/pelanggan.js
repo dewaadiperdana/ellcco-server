@@ -79,6 +79,36 @@ class PelangganController {
       throw error;
     }
   }
+
+  static async accountList(req, res) {
+    try {
+      const accounts = await AkunService.accountList('pelanggan');
+
+      return res.json(accounts);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async accountStatus(req, res) {
+    try {
+      const response = await AkunService.activateOrDeactivateAccount(req.body.type, 'pelanggan', req.body.id);
+
+      return res.json(response);
+    } catch (error) {
+      return res.status(400).json(error);
+    }
+  }
+
+  static async counts(req, res) {
+    try {
+      const response = await AkunService.counts('pelanggan');
+
+      res.json(response[0]);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default PelangganController;

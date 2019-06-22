@@ -30,14 +30,16 @@ class Mail {
 
   async send(from, to, subject, template, data = {}) {
     this.transport.sendMail({
-      from: from,
-      to: to,
-      subject: subject,
-      template: template,
+      from,
+      to,
+      subject,
+      template,
       context: data
     }, (error, response) => {
+      console.log(error);
+      console.log(response);
       if (error) {
-        throw error;
+        console.log(error);
       }
 
       this.transport.close();

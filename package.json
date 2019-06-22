@@ -10,7 +10,8 @@
     "start": "node ./build/app.js",
     "dev": "nodemon --exec babel-node ./src/app.js",
     "build": "rm -rf ./build && babel -d ./build ./src -s --copy-files",
-    "secretkey": "node ./src/scripts/generate-secret-key"
+    "secretkey": "node ./src/scripts/generate-secret-key",
+    "heroku-postbuild": "cd src/client && npm install --only=dev && npm install && npm run build"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.4",
@@ -37,7 +38,8 @@
     "randomstring": "^1.1.5",
     "sequelize": "^5.8.2",
     "sequelize-cli": "^5.4.0",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.2.0",
+    "universal-cookie-express": "^4.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -46,7 +48,6 @@
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/register": "^7.4.4",
-    "babel-loader": "^8.0.5",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.2"

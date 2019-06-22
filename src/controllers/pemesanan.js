@@ -101,6 +101,16 @@ class PemesananController {
       throw error;
     }
   }
+
+  static async filter(req, res) {
+    try {
+      const filter = await PemesananService.filter(req.params.time);
+
+      res.json(filter);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default PemesananController;

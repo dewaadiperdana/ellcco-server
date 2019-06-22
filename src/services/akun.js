@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { Hash } from "../utils";
+import { Hash, Mail } from "../utils";
 import db from "../database/models";
 import randomstring from "randomstring";
 import TukangService from "./tukang";
@@ -7,6 +7,7 @@ import VerifikasiService from "./verifikasi";
 
 const Pelanggan = db.Pelanggan;
 const Tukang = db.Tukang;
+const mail = new Mail();
 
 class AkunService {
   static async register(hakAkses, akun) {
@@ -284,6 +285,14 @@ class AkunService {
   static async checkIsAuthenticated(token) {
     try {
       const verified = jwt.verify(token, process.env.SECRET_KEY);
+      const account = await AkunService.getAccount(verified.hak_akses, verified.id);
+
+      if (!account.aktif) {
+        return Promise.resolve({
+          isAuthenticated: false,
+          hakAkses: verified.hak_akses
+        });
+      }
 
       return Promise.resolve({
         isAuthenticated: true,
@@ -340,9 +349,116 @@ class AkunService {
     }
   }
 
+  static async accountList(role) {
+    try {
+      let model;
+
+      switch (role) {
+        case 'pelanggan':
+          model = Pelanggan;
+          break;
+        case 'tukang':
+          model = Tukang;
+          break;
+        default:
+          model = Pelanggan;
+          break;
+      }
+
+      const account = await model.findAll({});
+
+      return Promise.resolve(account);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static getModel(role) {
+    switch (role) {
+      case 'pelanggan':
+        return Pelanggan;
+      case 'tukang':
+        return Tukang;
+      default:
+        return Pelanggan;
+    }
+  }
+
+  static async activateOrDeactivateAccount(type, role, id) {
+    const model = AkunService.getModel(role);
+
+    let active = false;
+    let mailTemplate = '';
+
+    switch (type) {
+      case 'activation':
+        active = true;
+        mailTemplate = 'account_activation';
+        break;
+      case 'deactivation':
+        active = false;
+        mailTemplate = 'account_deactivation';
+        break;
+      default:
+        active = true;
+        mailTemplate = 'account_activation';
+        break;
+    }
+
+    try {
+      const account = await model.findOne({ where: { id: id } });
+      model.update({ aktif: active }, { where: { id: id } });
+
+      if (type === 'activation' && account.aktif) {
+        return Promise.reject({
+          modal: {
+            key: 'modal',
+            message: 'Akun sudah dalam keadaan aktif'
+          }
+        });
+      }
+
+      if (type === 'deactivation' && !account.aktif) {
+        return Promise.reject({
+          modal: {
+            key: 'modal',
+            message: 'Akun sudah dalam keadaan nonaktif'
+          }
+        });
+      }
+
+      let send = await mail.send(
+        'Admin Ellcco <hello@ellcco.herokuapp.com>',
+        account.email,
+        'Pemberitahuan Akun',
+        mailTemplate,
+        account
+      );
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  static async counts(role) {
+    const model = AkunService.getModel(role);
+    const sequelize = db.sequelize;
+
+    try {
+      const counts = await model.findAll({
+        attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'counts']]
+      });
+      
+      return Promise.resolve(counts);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static generateKodeAkun(hakAkses) {
     let kode = "";
-    let random = randomstring.generate(10);
+    let random = randomstring.generate(5);
 
     switch (hakAkses) {
       case "pelanggan":

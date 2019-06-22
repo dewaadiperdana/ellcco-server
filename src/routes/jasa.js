@@ -4,9 +4,11 @@ import { StoreValidator } from '../middlewares/validators/jasa';
 
 const routes = express.Router();
 
-routes.get('/:limit?', JasaController.index);
 routes.post('/', StoreValidator.validate(), JasaController.store);
 routes.put('/:id', StoreValidator.validate(), JasaController.update);
 routes.delete('/:id', JasaController.delete);
+routes.get('/single/:id', JasaController.single);
+routes.get('/count', JasaController.count);
+routes.get('/:limit?', JasaController.index);
 
 export default routes;
