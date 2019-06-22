@@ -1,6 +1,9 @@
 {
   "name": "ellcco-server",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.16.0"
+  },
   "description": "Ellcco API server for Ellcco mobile app",
   "main": "app.js",
   "repository": "https://github.com/dewaadiperdana/ellcco-server.git",
