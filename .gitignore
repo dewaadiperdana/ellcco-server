@@ -3,5 +3,5 @@ yarn.lock
 build/
 /.env
 src/index.html
-src/client/build/
-src/client/yarn.lock
+client/build/
+client/yarn.lock

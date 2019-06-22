@@ -66,11 +66,11 @@ app.use('/api/v1/detailperbaikan', detailPerbaikanRoutes);
 app.use('/api/v1/ruangobrolan', ruangObrolanRoutes);
 app.use('/api/v1/admin', adminRoutes);
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'ellcco-client', 'build', 'index.html')));
-app.get('/chat', (req, res) => res.sendFile(__dirname + '/index.html'));
+app.get('/', (req, res) => res.sendFile(path.resolve(path.join(__dirname, '/../', 'client', 'build', 'index.html'))));
+app.get('/chat', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 server.listen(port, () => console.log(`Ellcco is running on port ${port}`));
-socketServer.on('connection', socket => {
+socketServer.on('connection', (socket) => {
   new Socket(socket);
 });
 
