@@ -155,21 +155,17 @@ class Tukang extends Component {
     }));
 
     return (
-      <div>
-        <Page.Header>
-          <Page.Title>Data Tukang</Page.Title>
-        </Page.Header>
-        <Grid.Row>
-          <Card>
-            <Card.Body>
-              <DataTable
-                columns={columns}
-                data={dataSet}
-              />
-            </Card.Body>
-          </Card>
-        </Grid.Row>
-      </div>
+      <Page.Content>
+        <Card>
+          <Card.Header>
+            <Card.Title>Data Tukang</Card.Title>
+          </Card.Header>
+          <DataTable
+            columns={columns}
+            data={dataSet}
+          />
+        </Card>
+      </Page.Content>
     );
   }
 }

@@ -19,6 +19,7 @@ routes.post(
 routes.get('/perbaikan/detail/:id', PemesananController.getDetail);
 routes.get('/histori/:tipe/:id', PemesananController.histori);
 routes.get('/filter/:time', PemesananController.filter);
+routes.get('/count', PemesananController.count);
 routes.get('/:id', PemesananController.detail);
 
 export default routes;

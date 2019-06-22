@@ -11,6 +11,7 @@ const Pemesanan = db.Pemesanan;
 const Pelanggan = db.Pelanggan;
 const DetailPerbaikan = db.DetailPerbaikan;
 const Op = Sequelize.Op;
+const sequelize = db.sequelize;
 
 class PemesananService {
   static async store(pesanan) {
@@ -258,9 +259,21 @@ class PemesananService {
     }
   }
 
+  static async count() {
+    try {
+      const count = await Pemesanan.findAll({
+        attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'count']],
+      });
+
+      return Promise.resolve(count);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static generateKodePesanan() {
-    let kode = "PS-";
-    let random = randomstring.generate(5).toUpperCase();
+    let kode = 'PS-';
+    const random = randomstring.generate(5).toUpperCase();
 
     kode += random;
     return kode;

@@ -20,8 +20,6 @@ class Akun {
   socket = '';
 
   constructor(data) {
-    delete data.password;
-
     Object.assign(this, data);
   }
 }

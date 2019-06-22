@@ -94,53 +94,28 @@ class Jasa extends Component {
         columns={columns}
       />
     );
-
-    // return jasa.map((item, index) => (
-    //   <Table.Row key={item.id}>
-    //     <Table.Col>{index + 1}</Table.Col>
-    //     <Table.Col>{item.nama}</Table.Col>
-    //     <Table.Col>{item.channel}</Table.Col>
-    //     <Table.Col>
-    //       <Link to={`/jasa/edit/${item.id}`}>
-    //         <Icon name="edit" />
-    //         <span className="ml-1">Edit</span>
-    //       </Link>
-    //       <a href="#" className="ml-2" onClick={(e) => this.deleteJasa(e, item.id)}>
-    //         <Icon name="trash" />
-    //         <span className="ml-1">Hapus</span>
-    //       </a>
-    //     </Table.Col>
-    //   </Table.Row>
-    // ));
   }
 
   render() {
     return (
-      <div>
-        <Page.Header>
-          <Page.Title>Data Jasa</Page.Title>
-        </Page.Header>
-        <Grid.Row cards>
-          <Card>
-            <Card.Header>
-              <Card.Title>Daftar data jasa</Card.Title>
-            </Card.Header>
-            <Card.Body>
-              <div className="mb-3">
-                <Button
-                  color="primary"
-                  icon="plus"
-                  RootComponent="a"
-                  href="/#/jasa/tambah"
-                >
-                  Tambah Data
-                </Button>
-              </div>
-              {this.renderDataJasa()}
-            </Card.Body>
-          </Card>
-        </Grid.Row>
-      </div>
+      <Page.Content>
+        <Card>
+          <Card.Header>
+            <Card.Title>Data Jasa</Card.Title>
+            <Card.Options>
+              <Button
+                color="secondary"
+                icon="plus"
+                RootComponent="a"
+                href="/#/jasa/tambah"
+              >
+                Tambah Data
+              </Button>
+            </Card.Options>
+          </Card.Header>
+          {this.renderDataJasa()}
+        </Card>
+      </Page.Content>
     );
   }
 }

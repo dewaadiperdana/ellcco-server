@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 
 import { fetchAccountCounts } from '../store/actions/akunActions';
 import { fetchJasaCount } from '../store/actions/jasaActions';
+import { fetchPemesananCount } from '../store/actions/pemesananActions';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -23,10 +24,11 @@ class Dashboard extends Component {
     this.props.fetchAccountCounts('pelanggan');
     this.props.fetchAccountCounts('tukang');
     this.props.fetchJasaCount();
+    this.props.fetchPemesananCount();
   }
 
   render() {
-    const { pelangganCount, tukangCount, jasaCount } = this.props;
+    const { pelangganCount, tukangCount, jasaCount, pemesananCount } = this.props;
 
     return (
       <div>
@@ -68,7 +70,7 @@ class Dashboard extends Component {
             <Grid.Col md={3}>
               <Card>
                 <Card.Body>
-                  <Header.H1 className="text-center">32</Header.H1>
+                  <Header.H1 className="text-center">{pemesananCount}</Header.H1>
                   <Text align="center">
                     Pesanan
                   </Text>
@@ -94,11 +96,13 @@ const mapStateToProps = state => ({
   pelangganCount: state.akun.pelangganCount,
   tukangCount: state.akun.tukangCount,
   jasaCount: state.jasa.count,
+  pemesananCount: state.pemesanan.count,
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchAccountCounts: (role) => { dispatch(fetchAccountCounts(role)); },
   fetchJasaCount: () => { dispatch(fetchJasaCount()); },
+  fetchPemesananCount: () => { dispatch(fetchPemesananCount()) },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

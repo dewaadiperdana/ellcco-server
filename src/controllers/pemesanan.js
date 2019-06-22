@@ -111,6 +111,16 @@ class PemesananController {
       throw error;
     }
   }
+
+  static async count(req, res) {
+    try {
+      const response = await PemesananService.count();
+
+      return res.json(response[0]);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default PemesananController;

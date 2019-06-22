@@ -155,21 +155,17 @@ class Pelanggan extends Component {
     }));
 
     return (
-      <div>
-        <Page.Header>
-          <Page.Title>Data Pelanggan</Page.Title>
-        </Page.Header>
-        <Grid.Row>
-          <Card>
-            <Card.Body>
-              <DataTable
-                columns={columns}
-                data={dataSet}
-              />
-            </Card.Body>
-          </Card>
-        </Grid.Row>
-      </div>
+      <Page.Content>
+        <Card>
+          <Card.Header>
+            <Card.Title>Data Pelanggan</Card.Title>
+          </Card.Header>
+          <DataTable
+            columns={columns}
+            data={dataSet}
+          />
+        </Card>
+      </Page.Content>
     );
   }
 }
