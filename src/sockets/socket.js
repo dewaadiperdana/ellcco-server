@@ -72,7 +72,7 @@ class Socket {
 
   async listenOnJoinChatRoom() {
     this.socket.on(ON_JOIN_CHAT_ROOM, async payload => {
-      console.log("A USER JOIN ROOM");
+      console.log("A USER JOIN CHAT ROOM");
 
       this.socket.join(payload.room);
     });
@@ -80,6 +80,7 @@ class Socket {
 
   async listenOnChatMessage() {
     this.socket.on(ON_CHAT_MESSAGE, async payload => {
+      console.log("CHAT MESSAGE");
       const data = JSON.parse(payload);
 
       const pesanObrolan = await PesanObrolanService.store(data.message);
