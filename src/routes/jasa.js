@@ -1,5 +1,5 @@
 import express from 'express';
-import JasaController from '../controllers/jasa';
+import JasaController from '../controllers/jasaController';
 import { StoreValidator } from '../middlewares/validators/jasa';
 
 const routes = express.Router();

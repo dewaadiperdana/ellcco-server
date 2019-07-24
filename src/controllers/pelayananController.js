@@ -1,4 +1,4 @@
-import PelayananService from "../services/pelayanan";
+import PelayananService from "../services/pelayananService";
 
 class PelayananController {
   static async list(req, res) {

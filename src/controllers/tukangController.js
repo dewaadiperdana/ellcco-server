@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator/check";
 import { Error } from "../utils";
-import AkunService from "../services/akun";
+import AkunService from "../services/akunService";
 
 class TukangController {
   static async register(req, res) {

@@ -2,8 +2,8 @@ import jwt from "jsonwebtoken";
 import { Hash, Mail } from "../utils";
 import db from "../database/models";
 import randomstring from "randomstring";
-import TukangService from "./tukang";
-import VerifikasiService from "./verifikasi";
+import TukangService from "./tukangService";
+import VerifikasiService from "./verifikasiService";
 
 const Pelanggan = db.Pelanggan;
 const Tukang = db.Tukang;
@@ -449,7 +449,7 @@ class AkunService {
       const counts = await model.findAll({
         attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'counts']]
       });
-      
+
       return Promise.resolve(counts);
     } catch (error) {
       throw error;

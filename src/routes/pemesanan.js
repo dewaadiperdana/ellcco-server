@@ -1,5 +1,5 @@
 import express from 'express';
-import PemesananController from '../controllers/pemesanan';
+import PemesananController from '../controllers/pemesananController';
 import {
   PesanValidator,
   AddBiayaValidator

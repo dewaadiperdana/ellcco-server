@@ -1,4 +1,4 @@
-import JasaService from "../services/jasa";
+import JasaService from "../services/jasaService";
 import { validationResult } from "express-validator/check";
 import { Error } from "../utils";
 

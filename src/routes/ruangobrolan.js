@@ -1,5 +1,5 @@
 import express from "express";
-import RuangObrolanController from "../controllers/ruangobrolan";
+import RuangObrolanController from "../controllers/ruangobrolanController";
 
 const routes = express.Router();
 

@@ -1,5 +1,5 @@
 import express from "express";
-import PelangganController from "../controllers/pelanggan";
+import PelangganController from "../controllers/pelangganController";
 import {
   RegisterValidator,
   LoginValidator,

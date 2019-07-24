@@ -1,4 +1,4 @@
-import PemesananService from "../services/pemesanan";
+import PemesananService from "../services/pemesananService";
 import { validationResult } from "express-validator/check";
 import { Error } from "../utils";
 import db from "../database/models";

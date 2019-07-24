@@ -1,4 +1,4 @@
-import RuangObrolanService from "../services/ruangobrolan";
+import RuangObrolanService from "../services/ruangobrolanService";
 
 class RuangObrolanController {
   static async index(req, res) {

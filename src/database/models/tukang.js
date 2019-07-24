@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Tukang.associate = function(models) {
     Tukang.hasMany(models.Pemesanan, {
-      foreignKey: "id_pelanggan",
+      foreignKey: "id_tukang",
       onDelete: "CASCADE",
       as: "pemesanan"
     });

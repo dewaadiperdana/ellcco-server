@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator/check";
 import { Error } from "../utils";
-import DetailPerbaikanService from "../services/detailperbaikan";
+import DetailPerbaikanService from "../services/detailperbaikanService";
 
 class DetailPerbaikanController {
   static async store(req, res) {

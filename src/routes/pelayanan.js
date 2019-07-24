@@ -1,5 +1,5 @@
 import express from "express";
-import PelayananController from "../controllers/pelayanan";
+import PelayananController from "../controllers/pelayananController";
 
 const routes = express.Router();
 

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { LoginValidator } from '../middlewares/validators/admin';
-import AdminController from '../controllers/admin';
+import AdminController from '../controllers/adminController';
 
 const routes = Router();
 

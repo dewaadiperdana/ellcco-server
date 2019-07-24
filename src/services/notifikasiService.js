@@ -1,7 +1,7 @@
 import db from "../database/models";
-import JasaService from "./jasa";
-import PelayananService from "./pelayanan";
-import PemesananService from "./pemesanan";
+import JasaService from "./jasaService";
+import PelayananService from "./pelayananService";
+import PemesananService from "./pemesananService";
 import PemesananEmitter from "../sockets/emitters/pemesanan";
 
 import { admin } from "../app";

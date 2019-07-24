@@ -1,4 +1,4 @@
-import NotifikasiService from "../services/notifikasi";
+import NotifikasiService from "../services/notifikasiService";
 
 class NotifikasiController {
   static async index(req, res) {

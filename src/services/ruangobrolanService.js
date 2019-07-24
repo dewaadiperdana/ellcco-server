@@ -1,7 +1,7 @@
 import db from "../database/models";
 import randomstring from "randomstring";
-import ChannelService from "./channel";
-import AkunService from "./akun";
+import ChannelService from "./channelService";
+import AkunService from "./akunService";
 import { admin } from "../app";
 
 const Pemesanan = db.Pemesanan;
@@ -87,6 +87,8 @@ class RuangObrolanService {
           await admin
             .messaging()
             .subscribeToTopic(akun.token, ruangObrolan.kode);
+
+           console.log('[SUBSCRIBE RUANG OBROLAN CHANNEL FCM]');
         }
       });
     } catch (error) {

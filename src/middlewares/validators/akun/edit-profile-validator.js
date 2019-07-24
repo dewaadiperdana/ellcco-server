@@ -1,5 +1,5 @@
 import { check } from "express-validator/check";
-import AkunService from "../../../services/akun";
+import AkunService from "../../../services/akunService";
 
 class EditProfileValidator {
   static validate(hakAkses) {

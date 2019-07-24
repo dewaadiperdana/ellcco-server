@@ -1,7 +1,8 @@
 import db from '../database/models';
 import randomstring from 'randomstring';
-import NotifikasiService from './notifikasi';
-import RuangObrolanService from './ruangobrolan';
+import NotifikasiService from './notifikasiService';
+import RuangObrolanService from './ruangobrolanService';
+import AkunService from './akunService';
 import moment from 'moment';
 import Sequelize from 'sequelize';
 
@@ -134,9 +135,31 @@ class PemesananService {
       await RuangObrolanService.create(pesanan);
       await NotifikasiService.sendOrderAcceptedNotification(pesanan);
 
+      await PemesananService.subscribeFCMRuangObrolan(idTukang, pesanan);
+
       return Promise.resolve(true);
     } catch (error) {
-      console.log(error);
+      throw error;
+    }
+  }
+
+  static async subscribeFCMRuangObrolan(idTukang, pesanan) {
+    try {
+      const tukang = await AkunService.getAccount('tukang', idTukang);
+      const pelanggan = await AkunService.getAccount('pelanggan', pesanan.id_pelanggan);
+
+      await RuangObrolanService.subscribeToRuangObrolanFCM('tukang', {
+        hakAkses: tukang.hak_akses,
+        idAkun: tukang.id,
+        token: tukang.token
+      });
+
+      await RuangObrolanService.subscribeToRuangObrolanFCM('pelanggan', {
+        hakAkses: pelanggan.hak_akses,
+        idAkun: pelanggan.id,
+        token: pelanggan.token
+      });
+    } catch (error) {
       throw error;
     }
   }

@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator/check';
 import { Error } from '../utils';
-import AdminService from '../services/admin';
+import AdminService from '../services/adminService';
 
 class AdminController {
   static async login(req, res) {

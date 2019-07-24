@@ -9,11 +9,11 @@ import {
 
 import { admin } from "../app";
 
-import AkunService from "../services/akun";
-import RuangObrolanService from "../services/ruangobrolan";
-import PelayananService from "../services/pelayanan";
-import PesanObrolanService from "../services/pesanobrolan";
-import NotifikasiService from "../services/notifikasi";
+import AkunService from "../services/akunService";
+import RuangObrolanService from "../services/ruangobrolanService";
+import PelayananService from "../services/pelayananService";
+import PesanObrolanService from "../services/pesanobrolanService";
+import NotifikasiService from "../services/notifikasiService";
 
 class Socket {
   constructor(socket) {
@@ -28,11 +28,13 @@ class Socket {
     this.listenOnLeaveOrderChannel();
     this.listenOnJoinChatRoom();
     this.listenOnChatMessage();
+    this.listenOnJoinChatRoomWhenOrderAccepted();
   }
 
   async listenOnNewFcmToken() {
     this.socket.on(ON_NEW_FCM_TOKEN, async payload => {
       const data = JSON.parse(payload);
+      console.log('FCM token subscribe');
 
       await AkunService.storeDeviceToken(data.hakAkses, data, this.socket);
       await RuangObrolanService.subscribeToRuangObrolanFCM(data.hakAkses, data);
@@ -49,6 +51,8 @@ class Socket {
         data.hakAkses,
         data
       );
+
+      await RuangObrolanService.subscribeToRuangObrolanFCM(data.hakAkses, data);
     });
   }
 
@@ -78,6 +82,10 @@ class Socket {
     });
   }
 
+  async listenOnJoinChatRoomWhenOrderAccepted() {
+    this.socket.on('subscribe client', () => console.log('client subscribed'));
+  }
+
   async listenOnChatMessage() {
     this.socket.on(ON_CHAT_MESSAGE, async payload => {
       console.log("CHAT MESSAGE");
@@ -88,6 +96,8 @@ class Socket {
         data.role,
         pesanObrolan
       );
+
+      console.log(data.ruang_obrolan);
 
       this.socket.broadcast
         .to(data.ruang_obrolan)

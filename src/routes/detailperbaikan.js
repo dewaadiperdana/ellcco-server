@@ -1,5 +1,5 @@
 import express from "express";
-import DetailPerbaikanController from "../controllers/detailperbaikan";
+import DetailPerbaikanController from "../controllers/detailperbaikanController";
 import { StoreDetailPerbaikanValidator } from "../middlewares/validators/detailperbaikan";
 
 const routes = express.Router();

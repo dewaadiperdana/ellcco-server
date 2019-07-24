@@ -1,5 +1,5 @@
 import express from 'express';
-import TukangController from '../controllers/tukang';
+import TukangController from '../controllers/tukangController';
 import {
   RegisterValidator,
   LoginValidator,
