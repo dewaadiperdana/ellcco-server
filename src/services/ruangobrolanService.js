@@ -105,6 +105,8 @@ class RuangObrolanService {
         }
       ]);
 
+      console.log('[SUBSCRIBE TO SOCKET CHAT ROOM]');
+
       akun.pemesanan.forEach(async pemesanan => {
         const ruangObrolan = await RuangObrolan.findOne({
           where: { id_pemesanan: pemesanan.id }

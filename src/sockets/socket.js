@@ -83,7 +83,7 @@ class Socket {
   }
 
   async listenOnJoinChatRoomWhenOrderAccepted() {
-    this.socket.on('subscribe client', () => console.log('client subscribed'));
+    this.socket.on('retrieve', (data) => console.log(data));
   }
 
   async listenOnChatMessage() {

@@ -5,6 +5,7 @@ import RuangObrolanService from './ruangobrolanService';
 import AkunService from './akunService';
 import moment from 'moment';
 import Sequelize from 'sequelize';
+import { eventEmitter } from '../app';
 
 const Jasa = db.Jasa;
 const Tukang = db.Tukang;
@@ -135,7 +136,7 @@ class PemesananService {
       await RuangObrolanService.create(pesanan);
       await NotifikasiService.sendOrderAcceptedNotification(pesanan);
 
-      await PemesananService.subscribeFCMRuangObrolan(idTukang, pesanan);
+      await PemesananService.subscribeToRuangObrolan(idTukang, pesanan);
 
       return Promise.resolve(true);
     } catch (error) {
@@ -143,7 +144,7 @@ class PemesananService {
     }
   }
 
-  static async subscribeFCMRuangObrolan(idTukang, pesanan) {
+  static async subscribeToRuangObrolan(idTukang, pesanan) {
     try {
       const tukang = await AkunService.getAccount('tukang', idTukang);
       const pelanggan = await AkunService.getAccount('pelanggan', pesanan.id_pelanggan);
@@ -158,6 +159,25 @@ class PemesananService {
         hakAkses: pelanggan.hak_akses,
         idAkun: pelanggan.id,
         token: pelanggan.token
+      });
+
+      eventEmitter.emit('ON_JOIN_CHAT_ROOMS', {
+        role: 'pelanggan',
+        data: {
+          idAkun: pelanggan.id,
+          hakAkses: pelanggan.hak_akses,
+          socket: pelanggan.socket,
+        }
+      });
+
+
+      eventEmitter.emit('ON_JOIN_CHAT_ROOMS', {
+        role: 'tukang',
+        data: {
+          idAkun: tukang.id,
+          hakAkses: tukang.hak_akses,
+          socket: tukang.socket,
+        }
       });
     } catch (error) {
       throw error;

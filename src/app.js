@@ -4,10 +4,10 @@ import * as admin from 'firebase-admin';
 import dotenv from 'dotenv';
 import io from 'socket.io';
 import http from 'http';
-import exphbs from 'express-handlebars';
 import path from 'path';
 import cors from 'cors';
 import cookiesMiddleware from 'universal-cookie-express';
+import events, { EventEmitter } from 'events';
 
 import Socket from './sockets/socket';
 import firebaseAdminConfig from './config/firebase';
@@ -23,12 +23,15 @@ import detailPerbaikanRoutes from './routes/detailperbaikan';
 import ruangObrolanRoutes from './routes/ruangobrolan';
 import adminRoutes from './routes/admin';
 
+import RuangObrolanService from './services/ruangobrolanService';
+
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8000;
 const server = http.createServer(app);
 const socketServer = io(server);
+const eventEmitter = new EventEmitter();
 
 admin.initializeApp({
   credential: admin.credential.cert(firebaseAdminConfig),
@@ -72,6 +75,10 @@ app.get('/chat', (req, res) => res.sendFile(path.join(__dirname, 'index.html')))
 server.listen(port, () => console.log(`Ellcco is running on port ${port}`));
 socketServer.on('connection', (socket) => {
   new Socket(socket);
+
+  eventEmitter.addListener('ON_JOIN_CHAT_ROOMS', async (payload) => {
+    await RuangObrolanService.subscribeToRuangObrolanSocket(socket, payload.role, payload.data);
+  });
 });
 
-export { admin, socketServer };
+export { admin, socketServer, eventEmitter };
